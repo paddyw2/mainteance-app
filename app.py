@@ -30,7 +30,7 @@ def cars_new():
 @app.route("/cars/results", methods=['POST'])
 def car_results():
   handler = car_handler()
-  info = handler.make_query("input")
+  info = handler.select_query("input")
   user_info = "[username]"
   view = render_template("cars/results.html", data=info)
   return view
@@ -38,7 +38,7 @@ def car_results():
 @app.route("/cars/new", methods=['POST'])
 def car_new_post():
   handler = car_handler()
-  info = handler.make_query("input")
+  info = handler.insert_query("input")
   user_info = "[username]"
   #view = render_template("cars/index.html", data=info)
   view = redirect(url_for('cars')) 
