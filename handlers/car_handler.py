@@ -1,4 +1,4 @@
-class Car_Handler:
+class car_handler:
 
   def connect_db(self):
     return True
