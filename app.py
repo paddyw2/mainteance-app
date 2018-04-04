@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, url_for
 from handlers.car_handler import car_handler
 app = Flask(__name__)
 
+
 @app.route("/")
 def homepage():
   user_info = "[username]"

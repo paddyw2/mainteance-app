@@ -1,0 +1,34 @@
+.wrapper {
+    max-width: 800px;
+    margin: auto;
+    padding: 10px;
+}
+
+.nav-banner {
+    width: 100%;
+    height: 70px;
+    background-color: #34495e;
+    padding: 20px;
+}
+
+.nav-inner {
+    max-width: 800px;
+    margin: auto;
+}
+
+.nav-items {
+    float: right;
+    color: #fff;
+}
+
+.nav-items a {
+    color: #fff;
+}
+
+button, .button,[type="submit"]  {
+    background-color: #2ecc71;
+}
+
+input, textarea, .select select {
+    margin: 5px 0px;
+}

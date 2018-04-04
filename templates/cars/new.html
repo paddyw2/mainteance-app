@@ -1,7 +1,8 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
 <h1>Create New Car</h1>
-<a href="/"><button>Home</button></a>
-<br>
-<br>
 <form action="/cars/new" method="post">
   <input type="text" placeholder="VIN Number" name="vin">
   <br>
@@ -17,3 +18,5 @@
   <br>
   <button type="submit">Create New Car</button>
 </form>
+
+{% endblock %}

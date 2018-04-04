@@ -1,7 +1,9 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
 <h1>Car Results</h1>
-<a href="/"><button>Home</button></a>
-<br>
-<br>
 
 {% for i in data %}
 <br>
@@ -12,3 +14,4 @@
 <br>
 {% endfor %}
 
+{% endblock %}
