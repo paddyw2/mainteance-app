@@ -32,6 +32,7 @@ create table if not exists user (
     phone_no varchar(100) not null,
     fname varchar(100) not null,
     lname varchar(100) not null,
+    is_admin int(10) not null,
     address varchar(250),
     primary key(employee_no)
 );
@@ -80,11 +81,17 @@ create table if not exists pos (
 create table if not exists backroom (
     backroom_id int(32) not null auto_increment,
     event_id int(32) not null,
+    assigned_to int(100),
     primary key(backroom_id),
     foreign key fk_event(event_id)
     references event(event_id)
     on update cascade
-    on delete cascade
+    on delete cascade,
+    foreign key fk_assigned_to(assigned_to)
+    references user(employee_no)
+    on update cascade
+    on delete set null
+
 );
 
 # POS sub tables
