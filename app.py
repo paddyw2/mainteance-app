@@ -1,12 +1,44 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, session
 from handlers.car_handler import car_handler
-app = Flask(__name__)
+import os
 
+app = Flask(__name__)
+app.secret_key = os.urandom(32)
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+  if request.method == "GET":
+    view = render_template("auth/login.html", data="")
+  else:
+    handler = car_handler()
+    if handler.check_valid_user(request.form['eid']):
+      session["logged_in"] = True
+      user_values = handler.select_query_values("select * from user where employee_no="+request.form['eid'])
+      session["employee_no"] = user_values[0][0]
+      session["phone"] = user_values[0][1]
+      session["fname"] = user_values[0][2]
+      session["lname"] = user_values[0][3]
+      session["address"] = user_values[0][4]
+      view = redirect(url_for("homepage"))
+    else:
+      message = "Not a valid employee ID"
+      view = render_template("auth/login.html", data=message)
+  return view
+
+@app.route("/logout")
+def logout():
+  session["logged_in"] = False
+  view = redirect(url_for("login"))
+  return view
 
 @app.route("/")
 def homepage():
-  user_info = "[username]"
-  view = render_template("index.html", data=user_info)
+  if session.get("logged_in") == True:
+    user_info = session
+    view = render_template("index.html", data=user_info)
+  else:
+    view = redirect(url_for('login')) 
   return view
 
 @app.route("/cars")

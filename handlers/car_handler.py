@@ -47,3 +47,18 @@ class car_handler:
     self.close_connection(cursor, cnx)
     return return_values
 
+  def check_valid_user(self, eid): 
+    cnx = self.connect_db()
+    cursor = cnx.cursor()
+    valid = False
+    try:
+      cursor.execute("select * from user where employee_no="+eid)
+      for row in cursor:
+        valid = True
+        break
+    except:
+      pass
+
+    self.close_connection(cursor, cnx)
+    return valid
+

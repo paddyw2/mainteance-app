@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Car Maintenance and Rental History</h1>
-<p>User: {{ data }}</p>
+<p>User: {{ data.get("fname") }}</p>
 
 <a href="/cars"><button>Cars</button></a>
 <a href="/events"><button>Events</button></a>

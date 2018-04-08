@@ -1,0 +1,15 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+<h1>Login</h1>
+{% if data != "" %}
+<p> {{ data }} </p>
+{% endif %}
+<form action="/login" method="post">
+  <input type="text" placeholder="Employee Number" name="eid">
+  <br>
+  <button type="submit">Log In</button>
+</form>
+
+{% endblock %}
