@@ -1,0 +1,21 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Car</h1>
+
+<p>Car info:</p>
+<p>
+{% for row_value in row_data[0] %}
+
+{{ row_value }},
+
+{% endfor %}
+</p>
+<a href="/cars/{{ data }}/events/new">
+  <button>
+    Create Event
+  </button>
+</a>
+{% endblock %}
