@@ -6,6 +6,10 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
 
+# sets the global object g
+# to have the session status
+# before each request (used
+# in require_login)
 @app.before_request
 def load_login_status():
   try:
@@ -13,7 +17,9 @@ def load_login_status():
   except:
     g.login_status = False
 
-
+# returns the decorated function
+# only if the login status is
+# true
 def require_login(function):
   @wraps(function)
   def decorator(*args, **kwargs):
@@ -68,18 +74,21 @@ def cars():
   return view
 
 @app.route("/cars/search")
+@require_login
 def cars_search():
   user_info = "[username]"
   view = render_template("cars/search.html", data=user_info)
   return view
 
 @app.route("/cars/new")
+@require_login
 def cars_new():
   user_info = "[username]"
   view = render_template("cars/new.html", data=user_info)
   return view
 
 @app.route("/cars/results", methods=['POST'])
+@require_login
 def car_results():
   handler = car_handler()
   # TODO: parse post parameters and include in query
@@ -113,6 +122,7 @@ def car_results():
 # Create Car
 
 @app.route("/cars/new", methods=['POST'])
+@require_login
 def car_new_post():
   handler = car_handler()
   vin = request.form['vin'] + ","
@@ -148,6 +158,7 @@ def car_new_post():
 # View Car
 
 @app.route("/cars/<int:car_id>")
+@require_login
 def car_view(car_id):
   handler = car_handler()
   rows = handler.select_query_values("select * from car where vin_no="+str(car_id))
@@ -158,6 +169,7 @@ def car_view(car_id):
 # Create Event
 
 @app.route("/cars/<int:car_id>/events/new")
+@require_login
 def event_new(car_id):
   handler = car_handler()
   info = handler.insert_query("input")
@@ -168,6 +180,7 @@ def event_new(car_id):
 # Create POS Event
 
 @app.route("/cars/<int:car_id>/events/pos/new")
+@require_login
 def event_pos_new(car_id):
   handler = car_handler()
   info = handler.insert_query("input")
@@ -176,6 +189,7 @@ def event_pos_new(car_id):
   return view
 
 @app.route("/cars/<int:car_id>/events/pos/create", methods=['POST'])
+@require_login
 def event_pos_create(car_id):
   handler = car_handler()
   info = handler.insert_query("input")
@@ -187,6 +201,7 @@ def event_pos_create(car_id):
 # Create Backroom Event
 
 @app.route("/cars/<int:car_id>/events/backroom/new")
+@require_login
 def event_backroom_new(car_id):
   handler = car_handler()
   info = handler.insert_query("input")
@@ -195,6 +210,7 @@ def event_backroom_new(car_id):
   return view
 
 @app.route("/cars/<int:car_id>/events/backroom/create", methods=['POST'])
+@require_login
 def event_backroom_create(car_id):
   handler = car_handler()
   info = handler.insert_query("input")

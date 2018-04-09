@@ -4,7 +4,9 @@
 
 
 <h1>Car Results</h1>
-
+{% if row_data|length == 0 %}
+<p>No results found</p>
+{% endif %}
 {% for row in row_data %}
 <br>
 {% for row_value in row %}
