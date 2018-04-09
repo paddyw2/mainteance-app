@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session
+from flask import Flask, render_template, redirect, url_for, request, session, g
 from functools import wraps
 from handlers.car_handler import car_handler
 import os
@@ -6,20 +6,21 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
 
-# https://stackoverflow.com/a/10176276
-# a decorator always takes only one argument
-# which is the function. But the decorator
-# can be a return value of a function which
-# might take arguments
-def require_login(session):
-  def decorator(function):
-    @wraps(function)
-    def check_login(*args, **kwargs):
-      if(session.get("logged_in") == True):
-        return function(*args, **kwargs)
-      else:
-        return redirect(url_for("login"))
-    return check_login
+@app.before_request
+def load_login_status():
+  try:
+    g.login_status = session.get("logged_in")
+  except:
+    g.login_status = False
+
+
+def require_login(function):
+  @wraps(function)
+  def decorator(*args, **kwargs):
+    if(g.login_status == True):
+      return function(*args, **kwargs)
+    else:
+      return redirect(url_for("login"))
   return decorator
 
 # gets the users posted login information
@@ -54,14 +55,14 @@ def logout():
   return view
 
 @app.route("/")
-@require_login(session)
+@require_login
 def homepage():
   user_info = session
   view = render_template("index.html", data=user_info)
   return view
 
 @app.route("/cars")
-@require_login(session)
+@require_login
 def cars():
   view = render_template("cars/index.html")
   return view
