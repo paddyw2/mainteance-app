@@ -6,7 +6,12 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
 
-def require_login_2(session):
+# https://stackoverflow.com/a/10176276
+# a decorator always takes only one argument
+# which is the function. But the decorator
+# can be a return value of a function which
+# might take arguments
+def require_login(session):
   def decorator(function):
     @wraps(function)
     def check_login(*args, **kwargs):
@@ -16,27 +21,6 @@ def require_login_2(session):
         return redirect(url_for("login"))
     return check_login
   return decorator
-
-# takes the sessions and
-# checks if an active session
-# exists
-# if it does, it returns a
-# decorator that does not
-# modify the function
-# if it does not, it returns
-# decorator that alters all
-# return values to login page
-def require_login(session):
-  def logged_in(function):
-    return function
-  def not_logged_in(function):
-    return redirect(url_for("login"))
-
-  if(session.get("logged_in") == True):
-    return logged_in
-  else:
-    return not_logged_in
-
 
 # gets the users posted login information
 # and verifies the ID is in the db
@@ -70,13 +54,14 @@ def logout():
   return view
 
 @app.route("/")
-@require_login_2(session)
+@require_login(session)
 def homepage():
   user_info = session
   view = render_template("index.html", data=user_info)
   return view
 
 @app.route("/cars")
+@require_login(session)
 def cars():
   view = render_template("cars/index.html")
   return view
