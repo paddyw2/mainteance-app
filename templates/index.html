@@ -7,6 +7,8 @@
 <a href="/cars"><button>Cars</button></a>
 <a href="/events"><button>Events</button></a>
 <a href="/customers"><button>Customers</button></a>
-<a href="/users"><button>Users</button></a>
+{% if data.get("is_admin") == 1 %}
+    <a href="/users"><button>Users</button></a>
+{% endif %}
 
 {% endblock %}

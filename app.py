@@ -19,7 +19,8 @@ def login():
       session["phone"] = user_values[0][1]
       session["fname"] = user_values[0][2]
       session["lname"] = user_values[0][3]
-      session["address"] = user_values[0][4]
+      session["is_admin"] = user_values[0][4]
+      session["address"] = user_values[0][5]
       view = redirect(url_for("homepage"))
     else:
       message = "Not a valid employee ID"
