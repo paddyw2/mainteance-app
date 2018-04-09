@@ -1,11 +1,47 @@
 from flask import Flask, render_template, redirect, url_for, request, session
+from functools import wraps
 from handlers.car_handler import car_handler
 import os
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
 
+def require_login_2(session):
+  def decorator(function):
+    @wraps(function)
+    def check_login(*args, **kwargs):
+      if(session.get("logged_in") == True):
+        return function(*args, **kwargs)
+      else:
+        return redirect(url_for("login"))
+    return check_login
+  return decorator
 
+# takes the sessions and
+# checks if an active session
+# exists
+# if it does, it returns a
+# decorator that does not
+# modify the function
+# if it does not, it returns
+# decorator that alters all
+# return values to login page
+def require_login(session):
+  def logged_in(function):
+    return function
+  def not_logged_in(function):
+    return redirect(url_for("login"))
+
+  if(session.get("logged_in") == True):
+    return logged_in
+  else:
+    return not_logged_in
+
+
+# gets the users posted login information
+# and verifies the ID is in the db
+# if successul, sets the session values
+# as the current users
 @app.route("/login", methods=['GET', 'POST'])
 def login():
   if request.method == "GET":
@@ -34,12 +70,10 @@ def logout():
   return view
 
 @app.route("/")
+@require_login_2(session)
 def homepage():
-  if session.get("logged_in") == True:
-    user_info = session
-    view = render_template("index.html", data=user_info)
-  else:
-    view = redirect(url_for('login')) 
+  user_info = session
+  view = render_template("index.html", data=user_info)
   return view
 
 @app.route("/cars")
@@ -58,7 +92,6 @@ def cars_new():
   user_info = "[username]"
   view = render_template("cars/new.html", data=user_info)
   return view
-
 
 @app.route("/cars/results", methods=['POST'])
 def car_results():
@@ -188,8 +221,7 @@ def event_backroom_create(car_id):
 
 @app.route("/events")
 def events():
-  user_info = "[username]"
-  view = render_template("events/index.html", data=user_info)
+  view = render_template("events/index.html")
   return view
 
 @app.route("/customers")
