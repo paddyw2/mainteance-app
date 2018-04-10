@@ -1,0 +1,16 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Event</h1>
+
+<p>Event info:</p>
+<p>
+{% for row_value in row_data[0] %}
+
+{{ row_value }},
+
+{% endfor %}
+</p>
+{% endblock %}

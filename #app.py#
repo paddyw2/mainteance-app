@@ -272,6 +272,21 @@ def event_view(event_id):
   return view
 
 
+#@app.route("event/delete/<int:event_id>")
+#@require_login
+#def event_delete(event_id):
+#  handler = car_handler()
+#  handler.delete_query(event_id) //This doesn't exist yet
+#  view = render_template("events/event-deleted-page.html") //this page doesn't exist yet
+#  return view
+
+
+
+
+  
+
+
+
 @app.route("/customers")
 def customers():
   user_info = "[username]"

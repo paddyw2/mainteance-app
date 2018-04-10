@@ -53,7 +53,7 @@ create table if not exists event (
     on update cascade
     on delete cascade,
     foreign key fk_created_by(created_by)
-    references user(employee_no)
+    references user(created_by)
     on update cascade
     on delete set null
 );
