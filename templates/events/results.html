@@ -1,0 +1,24 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Event Results</h1>
+{% if row_data|length == 0 %}
+<p>No results found</p>
+{% endif %}
+{% for row in row_data %}
+<br>
+{% for row_value in row %}
+{{ row_value }} ,
+{% endfor %}
+<a href="/events/{{ row[0] }}"><button>View</button></a>
+<a href="#"><button>Edit</button></a>
+<a href="#"><button>Delete</button></a>
+<a href="#"><button>View Events</button></a>
+<a href="#"><button>Create Event</button></a>
+
+<br>
+{% endfor %}
+
+{% endblock %}

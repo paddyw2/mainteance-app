@@ -222,8 +222,44 @@ def event_backroom_create(car_id):
 # Other routes
 
 @app.route("/events")
+@require_login
 def events():
   view = render_template("events/index.html")
+  return view
+
+@app.route("/events/results", methods=['POST'])
+@require_login
+def events_results():
+  handler = car_handler()
+  # TODO: parse post parameters and include in query
+  vin = request.form['vin']
+  if(vin != ""):
+    vin = " vin_no="+vin
+  createdBY = request.form['created_by']
+  if(createdBY != ""):
+    createdBY = " and created_by=\""+createdBY+"\""
+  title = request.form['title']
+  if(title != ""):
+    title = " and title=\""+title+"\""
+  startDate = request.form['start_date']
+  if(startDate != ""):
+    startDate = " and start_date=\""+start_date+"\""
+  endDate = request.form['end_date']
+  if(endDate != ""):
+    endData = " and end_date=\""+end_date+"\""
+  status = request.form['status']
+  if(status != ""):
+    status = " and status=\""+status+"\""
+  description = request.form['description']
+  if(description != ""):
+    description = " and description=\""+description+"\""
+  # query
+  query_string = "select * from car where"+vin+createdBY+title+startDate+endDate+status+description
+  if("where and" in query_string):
+    query_string = query_string.replace("where and", "where")
+  print(query_string)
+  rows = handler.select_query_values(query_string)
+  view = render_template("events/results.html", row_data=rows)
   return view
 
 @app.route("/customers")
