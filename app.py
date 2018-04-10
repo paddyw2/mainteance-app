@@ -87,6 +87,17 @@ def cars_new():
   view = render_template("cars/new.html", data=user_info)
   return view
 
+
+#This section is for a customer renting a car, not for a user searching cars
+############################################################################
+@app.route("/car/rental")
+@require_login
+def car_rental():
+  return true
+
+############################################################################
+
+
 @app.route("/cars/results", methods=['POST'])
 @require_login
 def car_results():
