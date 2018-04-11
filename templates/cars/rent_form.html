@@ -1,0 +1,31 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Rental Form</h1>
+<!-- Could add a an argument parameter to display the car being rented-->
+<form> <!-- can use action if we want to process -->
+  <input type="text" placeholder="Driver's License" name="license">
+  <br>
+  <input type="text" placeholder="Insurance Company" name="insurance">
+  <br>
+  <input type="text" placeholder="Rental Start: MM/DD/YR" name="rentStart">
+  <br>
+  <input type="text" placeholder="Rental End: MM/DD/YR" name="rentEnd">
+  <br>
+  <input type="text" placeholder="Additional Requests" name="status">
+  <br>
+  <br>
+   Add Super Mega Rental Car Golden Palace insurance?
+  <br>
+  <br>
+  <input type="radio" name="our_insurance" value="yes" checked> Yes
+  <br>
+  <input type="radio" name="our_insurance" value="no"> No
+  <br>
+  <br>
+  <button type="submit">Submit Form</button>
+</form>
+
+{% endblock %}

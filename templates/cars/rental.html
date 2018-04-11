@@ -1,0 +1,23 @@
+{% extends "includes/layout.html" %}
+
+<!-- All available cars should be displayed with 
+an option to buy or rent the car -->
+
+{% block content %}
+<h1>List of available cars</h1>
+{% if row_data|length == 0 %}
+<p>No results found</p>
+{% endif %}
+<p>User: {{ data.get("fname") }}</p>
+
+{% for row in row_data %}
+<br>
+{% for row_value in row %}
+{{ row_value }} ,
+
+<a href="/cars/buy_form"><button>Buy me!</button></a>
+<a href="/cars/rental_form"><button>Rent this car</button></a>
+
+<br>
+{% endfor %}
+{% endblock %}
