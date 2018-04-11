@@ -1,0 +1,16 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Sale</h1>
+
+<p>Sale info:</p>
+<p>
+{% for row_value in row_data[0] %}
+
+{{ row_value }},
+
+{% endfor %}
+</p>
+{% endblock %}

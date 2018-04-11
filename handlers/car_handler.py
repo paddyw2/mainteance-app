@@ -33,8 +33,10 @@ class car_handler:
     cnx = self.connect_db()
     cursor = cnx.cursor()
     cursor.execute(query)
+    last_id = cursor.lastrowid
     cnx.commit()
     self.close_connection(cursor, cnx)
+    return last_id
 
 
   def select_query_values(self, query):
