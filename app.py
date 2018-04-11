@@ -92,7 +92,7 @@ def cars_new():
 ############################################################################
 
 # Displays list of available cars that a user can choose to rent (or possibly buy) from
-@app.route("/car/rental")
+@app.route("/cars/rental")
 @require_login
 def car_rental():
   return true
