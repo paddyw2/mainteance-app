@@ -9,5 +9,5 @@ Starting flask
 Looking at the database:
 
 1. mysql -uroot
-2. use 471_project;
+2. use 471_project;       (Or any other database made)
 3. list tables
