@@ -90,6 +90,8 @@ def cars_new():
 
 #This section is for a customer renting a car, not for a user searching cars
 ############################################################################
+
+# Displays list of available cars that a user can choose to rent (or possibly buy) from
 @app.route("/car/rental")
 @require_login
 def car_rental():
@@ -97,7 +99,7 @@ def car_rental():
 
 ############################################################################
 
-
+# Displays list of cars based on search parameters
 @app.route("/cars/results", methods=['POST'])
 @require_login
 def car_results():
@@ -177,7 +179,7 @@ def car_view(car_id):
   view = render_template("cars/show.html", data=info, row_data=rows)
   return view
 
-# Create Event
+# Create Event - Functionality for creation visible per each car
 
 @app.route("/cars/<int:car_id>/events/new")
 @require_login
@@ -238,6 +240,7 @@ def events():
   view = render_template("events/index.html")
   return view
 
+# Displays list of events based on search parameters
 @app.route("/events/results", methods=['POST'])
 @require_login
 def events_results():
@@ -273,6 +276,7 @@ def events_results():
   view = render_template("events/results.html", row_data=rows)
   return view
 
+# Redirects to specific page dedicated to a single event for a car
 @app.route("/events/<int:event_id>")
 @require_login
 def event_view(event_id):
