@@ -97,6 +97,18 @@ def cars_new():
 def car_rental():
   return true
 
+# Submission form for renting a car
+@app.route("/cars/rental_form")
+@require_login
+def car_rental_form():
+  return true
+
+# Submission form for buying a car
+@app.route("/cars/buy_form")
+@require_login
+def car_buy_form():
+  return true
+
 ############################################################################
 
 # Displays list of cars based on search parameters
