@@ -2,6 +2,18 @@
 
 {% block content %}
 
+<h1>Choose POS Event Type</h1>
+<a href="/cars/{{ data }}/events/pos/rental/new">
+    <button>Rental</button>
+</a>
+<a href="/cars/{{ data }}/events/pos/sale/new">
+    <button>Sale</button>
+</a>
+<a href="/cars/{{ data }}/events/pos/available/new">
+    <button>Available</button>
+</a>
+
+<!--
 <h1>Create New POS Event</h1>
 <form action="/cars/{{ data }}/events/pos/create" method="post">
   <input type="text" placeholder="VIN Number" name="vin">
@@ -13,4 +25,5 @@
   <button type="submit">Create New POS</button>
 </form>
 
+-->
 {% endblock %}
