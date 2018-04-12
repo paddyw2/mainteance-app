@@ -2,16 +2,22 @@
 
 {% block content %}
 
+<!-- Results are listed as table with buttons for each entry -->
 
 <h1>Car Results</h1>
 {% if row_data|length == 0 %}
+
 <p>No results found</p>
-{% endif %}
+
+{% else %}
+
 {% for row in row_data %}
-<br>
-{% for row_value in row %}
-{{ row_value }} ,
-{% endfor %}
+<table bgcolor = #111111 border="1" >
+  <tr>
+    {% for row_value in row %} <th> {{ row_value }} </th> {% endfor %}
+  </tr>
+</table>
+
 <a href="/cars/{{ row[0] }}"><button>View</button></a>
 <a href="#"><button>Edit</button></a>
 <a href="#"><button>Delete</button></a>
@@ -20,5 +26,5 @@
 
 <br>
 {% endfor %}
-
+{% endif %}
 {% endblock %}
