@@ -611,6 +611,7 @@ def customers_created():
     view = render_template("customers/created.html")
   else:
     view = render_template("customers/notCreated.html")
+    
   return view
   
 

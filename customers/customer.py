@@ -3,7 +3,7 @@ class customer:
     def search_customer(post_values):
         license_no = post_values['license_no']
         if (license_no != ""):
-            license_noo = " and license_no="+license_no
+            license_no = " and license_no="+license_no
         phone_no = post_values['phone_no']
         if (phone_no != ""):
             phone_no = " and phone_no=\""+phone_no+"\""
@@ -28,7 +28,7 @@ class customer:
 
     # Function for creating a customer
     def create_customer(post_values):
-        license_no = post_values['license_no'] + ","
+        license_no = "\"" + post_values['license_no'] + "\","
         extra_values = ""
         phone_no = post_values['phone_no']
         if (phone_no != ""):
@@ -55,7 +55,7 @@ class customer:
             email = "\""+email+"\","
             extra_values += ", email"
 
-        query_string = "insert into user (employee_no"+extra_values+") values("+employee_no+phone_no+fname+lname+is_admin+address+");" 
+        query_string = "insert into customer (license_no"+extra_values+") values("+license_no+phone_no+fname+lname+address+email+");" 
 
         query_string = query_string.replace(",)",")")
         print(query_string)
