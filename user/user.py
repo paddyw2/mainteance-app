@@ -14,13 +14,19 @@ class user:
         if (lname != ""):
             lname = " and lname=\""+lname+"\""
         is_admin = post_values['is_admin']
+        print("is_admin value : " + is_admin)
         if (is_admin != ""):
-            is_admin = " is_admin="+is_admin
+            if (is_admin.upper() == "YES"):
+                is_admin = " is_admin=1"
+            elif(is_admin.upper() == "NO"):
+                is_admin = " is_admin=0"
+            else:
+                is_admin = ""
         address = post_values['address']
         if (address != ""):
             address = " and address=\""+address+"\""
             
-        query_string = "select * from user where"+employee_no+phone_no+fname+lname+address
+        query_string = "select * from user where"+employee_no+phone_no+fname+lname+is_admin+address
         if("where and" in query_string):
             query_string = query_string.replace("where and", "where")
         print(query_string)
