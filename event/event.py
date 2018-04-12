@@ -150,7 +150,12 @@ class event:
       query_end = ""
 
         # query
-    query_string = "select * from event as e where"+vin+createdBY+title+startDate+endDate+status+description + query_end
+    query_body = vin+createdBY+title+startDate+endDate+status+description + query_end
+ 
+    if(query_body == ""):
+      query_string = "select * from event"
+    else:
+      query_string = "select * from event as e where"+query_body
     if("where and" in query_string):
       query_string = query_string.replace("where and", "where")
     print(query_string)
