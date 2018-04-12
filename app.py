@@ -246,11 +246,13 @@ def event_available_pos_update(event_id):
   event_query = event.update_event(request.form, event_id)
   handler.insert_values(event_query)
   pos_query = pos.update_pos(request.form["assigned"], event_id)
-  pos_id = handler.insert_values(pos_query)
-  available_query = available.update_available(request.form, pos_id)
+  handler.insert_values(pos_query)
+  # get pos_id
+  row = handler.select_query_values("select pos_id from pos where event_id="+str(event_id))
+  pos_id = row[0][0]
+  available_query = available.update_available(request.form, pos_id, "")
   available_id = handler.insert_values(available_query)
-  info = car_id
-  view = redirect(url_for('event_new', car_id=info)) 
+  view = redirect(url_for('event_view',event_id=event_id)) 
   return view
 
 
@@ -276,6 +278,23 @@ def event_rental_create(car_id):
   view = redirect(url_for('event_new', car_id=info)) 
   return view
 
+@app.route("/events/pos/rental/<int:event_id>/update", methods=['POST'])
+@require_login
+def event_rental_update(event_id):
+  handler = car_handler()
+  event_query = event.update_event(request.form, event_id)
+  handler.insert_values(event_query)
+  pos_query = pos.update_pos(request.form["assigned"], event_id)
+  handler.insert_values(pos_query)
+  # get pos_id
+  row = handler.select_query_values("select pos_id from pos where event_id="+str(event_id))
+  pos_id = row[0][0]
+  rental_query = rental.update_rental(request.form, pos_id)
+  rental_id = handler.insert_values(rental_query)
+  view = redirect(url_for('event_view',event_id=event_id)) 
+  return view
+
+
 # Sale
 @app.route("/cars/<int:car_id>/events/pos/sale/new")
 @require_login
@@ -297,6 +316,23 @@ def event_sale_create(car_id):
   info = car_id
   view = redirect(url_for('event_new', car_id=info)) 
   return view
+
+@app.route("/events/pos/sale/<int:event_id>/update", methods=['POST'])
+@require_login
+def event_sale_update(event_id):
+  handler = car_handler()
+  event_query = event.update_event(request.form, event_id)
+  handler.insert_values(event_query)
+  pos_query = pos.update_pos(request.form["assigned"], event_id)
+  handler.insert_values(pos_query)
+  # get pos_id
+  row = handler.select_query_values("select pos_id from pos where event_id="+str(event_id))
+  pos_id = row[0][0]
+  sale_query = sale.update_sale(request.form, pos_id)
+  sale_id = handler.insert_values(sale_query)
+  view = redirect(url_for('event_view',event_id=event_id)) 
+  return view
+
 
 #-------------------------#
 # Create Backroom Event

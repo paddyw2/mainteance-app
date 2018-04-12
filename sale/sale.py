@@ -11,3 +11,12 @@ class sale:
     print(query_string)
     return query_string
 
+  def update_sale(post_values, pos_id):
+    price = post_values['price']
+    if(price != ""):
+      price = ",price=\""+price+"\""
+    # query
+    query_string = "update sale set pos_id="+str(pos_id)+price+" where pos_id="+str(pos_id)+";"
+    print(query_string)
+    return query_string
+

@@ -7,11 +7,11 @@
 <form action="/events/pos/available/{{ event_id }}/update" method="post">
   {% include 'includes/event_form_edit.html' %}
   {% include 'includes/pos_form_edit.html' %}
-  <input type="text" placeholder="Condition" name="car_condition" value="{{ row_data[0][9] }}">
+  <input type="text" placeholder="Condition" name="car_condition" value="{{ row_data[0][14] }}">
   <br>
-  <input type="text" placeholder="Sale Price" name="sale_price" value="{{ row_data[0][10] }}">
+  <input type="text" placeholder="Sale Price" name="sale_price" value="{{ row_data[0][15] }}">
   <br>
-  <input type="text" placeholder="Next Repair" name="next_repair" value="{{ row_data[0][11] }}">
+  <input type="text" placeholder="Next Repair" name="next_repair" value="{{ row_data[0][16] }}">
   <br>
   <button type="submit">Update Available Event</button>
 </form>

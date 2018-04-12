@@ -1,0 +1,15 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Edit Sale Event</h1>
+<form action="/events/pos/sale/{{ event_id }}/update" method="post">
+  {% include 'includes/event_form_edit.html' %}
+  {% include 'includes/pos_form_edit.html' %}
+  <input type="text" placeholder="Price" name="price" value="{{ row_data[0][13] }}">
+  <br>
+  <button type="submit">Update Sale Event</button>
+</form>
+
+{% endblock %}
