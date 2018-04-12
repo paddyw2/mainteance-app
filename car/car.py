@@ -73,7 +73,11 @@ class car:
     if(description != ""):
       description = " and description=\""+description+"\""
     # query
-    query_string = "select * from car where"+vin+make+model+lno+status+description
+    query_body = vin+make+model+lno+status+description
+    if(query_body == ""):
+      query_string = "select * from car"
+    else:
+      query_string = "select * from car where"+vin+make+model+lno+status+description
     if("where and" in query_string):
       query_string = query_string.replace("where and", "where")
     print(query_string)
