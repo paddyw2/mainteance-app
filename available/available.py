@@ -1,5 +1,5 @@
 class available:
-  def create_available(post_values, pos_id):
+  def create_available(post_values, pos_id, available_id):
     sale_price = post_values['sale_price']
     car_condition = post_values['car_condition']
     next_repair = post_values['next_repair']
@@ -14,7 +14,10 @@ class available:
       next_repair = ",\""+next_repair+"\""
       extra_values += ",next_repair" 
     # query
-    query_string = "insert into available(pos_id"+extra_values+") values("+str(pos_id)+sale_price+car_condition+next_repair+");"
+    if(pos_id != ""):
+      query_string = "insert into available(pos_id"+extra_values+") values("+str(pos_id)+sale_price+car_condition+next_repair+");"
+    else:
+      query_string = "insert into available(backroom_id"+extra_values+") values("+str(backroom_id)+sale_price+car_condition+next_repair+");"
     query_string = query_string.replace(",)", ")")
     print(query_string)
     return query_string

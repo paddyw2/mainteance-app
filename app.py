@@ -192,7 +192,7 @@ def event_available_pos_create(car_id):
   event_id = handler.insert_values(event_query)
   pos_query = pos.create_pos(event_id, request.form["assigned"])
   pos_id = handler.insert_values(pos_query)
-  available_query = available.create_available(request.form, pos_id)
+  available_query = available.create_available(request.form, pos_id, "")
   available_id = handler.insert_values(available_query)
   info = car_id
   view = redirect(url_for('event_new', car_id=info)) 
@@ -315,6 +315,28 @@ def event_writeoff_create(car_id):
   backroom_id = handler.insert_values(backroom_query)
   writeoff_query = writeoff.create_writeoff(request.form, backroom_id)
   writeoff_id = handler.insert_values(writeoff_query)
+  info = car_id
+  view = redirect(url_for('event_new', car_id=info)) 
+  return view
+
+# Available
+@app.route("/cars/<int:car_id>/events/backroom/available/new")
+@require_login
+def event_available(car_id):
+  info = car_id
+  view = render_template("events/backroom/available/new.html", car_id=info)
+  return view
+
+@app.route("/cars/<int:car_id>/events/backroom/available/create", methods=['POST'])
+@require_login
+def event_available_create(car_id):
+  handler = car_handler()
+  event_query = event.create_event(request.form, car_id, session.get("employee_no"))
+  event_id = handler.insert_values(event_query)
+  backroom_query = backroom.create_backroom(event_id, request.form["assigned"])
+  backroom_id = handler.insert_values(backroom_query)
+  available_query = available.create_available(request.form, "", backroom_id)
+  available_id = handler.insert_values(available_query)
   info = car_id
   view = redirect(url_for('event_new', car_id=info)) 
   return view
