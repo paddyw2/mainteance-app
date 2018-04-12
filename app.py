@@ -12,6 +12,7 @@ from backroom.backroom import backroom
 from repair.repair import repair
 from inspection.inspection import inspection
 from writeoff.writeoff import writeoff
+from user.user import user
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -405,13 +406,25 @@ def event_view(event_id):
 
 
 @app.route("/customers")
+@require_login
 def customers():
   user_info = "[username]"
   view = render_template("customers/index.html", data=user_info)
   return view
 
 @app.route("/users")
+@require_login
 def users():
   user_info = "[username]"
   view = render_template("users/index.html", data=user_info)
   return view
+
+@app.route("/users/results", methods=['POST'])
+@require_login
+def users_search():
+  handler = car_handler()
+  query_string = user.search_user(request.form)
+  rows = handler.select_query_values(query_string)
+  view = render_template("users/results.html", row_data=rows)
+  return view
+

@@ -1,0 +1,25 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Events</h1>
+<form action="/events/results" method="post">
+    <input type="text" placeholder="VIN Number" name="vin">
+  <br>
+  <input type="text" placeholder="Created By" name="created_by">
+  <br>
+  <input type="text" placeholder="Description" name="description">
+  <br>
+  <input type="text" placeholder="Title" name="title">
+  <br>
+  <input type="text" placeholder="Status" name="status">
+  <br>
+  <input type="text" placeholder="Start Date" name="start_date">
+  <br>
+  <input type="text" placeholder="End Date" name="end_date">
+  <br>
+  <button type="submit">Execute Query</button>
+</form>
+
+{% endblock %}
