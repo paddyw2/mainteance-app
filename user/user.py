@@ -26,7 +26,11 @@ class user:
         if (address != ""):
             address = " and address=\""+address+"\""
             
-        query_string = "select * from user where"+employee_no+phone_no+fname+lname+is_admin+address
+        query_body = employee_no+phone_no+fname+lname+is_admin+address
+        if(query_body == ""):
+          query_string = "select * from user"
+        else:
+          query_string = "select * from user where"+employee_no+phone_no+fname+lname+is_admin+address
         if("where and" in query_string):
             query_string = query_string.replace("where and", "where")
         print(query_string)

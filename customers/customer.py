@@ -20,7 +20,11 @@ class customer:
         if (email != ""):
             email = " and email=\""+email+"\""        
             
-        query_string = "select * from customer  where"+license_no+phone_no+fname+lname+address+email
+        query_body = license_no+phone_no+fname+lname+address+email
+        if(query_body == ""):
+          query_string = "select * from customer"
+        else:
+          query_string = "select * from customer  where"+license_no+phone_no+fname+lname+address+email
         if("where and" in query_string):
             query_string = query_string.replace("where and", "where")
         print(query_string)

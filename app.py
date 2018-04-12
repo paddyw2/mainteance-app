@@ -685,6 +685,15 @@ def users_created():
     view = render_template("/users/notCreated.html")
   return view
 
+# Delete customer
+@app.route("/useres/<int:user_id>/delete", methods=['POST'])
+@require_login
+@require_admin
+def user_delete(user_id):
+  handler = car_handler()
+  rows = handler.insert_values("delete from user where employee_no=\""+str(user_id)+"\"")
+  view = redirect(url_for('users')) 
+  return view
 
 #------
 # Error handling
