@@ -656,3 +656,23 @@ def users_created():
   else:
     view = render_template("/users/notCreated.html")
   return view
+
+
+#------
+# Error handling
+#------
+
+@app.errorhandler(500)
+def internal_error(exception):
+  view = render_template("/errors/500.html")
+  return view
+
+@app.errorhandler(404)
+def not_found(exception):
+  view = render_template("/errors/404.html")
+  return view
+
+@app.errorhandler(405)
+def method_not_allowed(exception):
+  view = render_template("/errors/404.html")
+  return view
