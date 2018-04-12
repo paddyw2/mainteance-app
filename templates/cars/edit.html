@@ -1,0 +1,22 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+<h1>Edit Car</h1>
+<form action="/cars/{{ car_id }}/update" method="post">
+  <input type="text" placeholder="VIN Number" value="{{ row_data[0][0] }}" name="vin">
+  <br>                                        
+  <input type="text" placeholder="Make" value="{{ row_data[0][1] }}" name="make">
+  <br>                                        
+  <input type="text" placeholder="Model" value="{{ row_data[0][2] }}" name="model">
+  <br>                                        
+  <input type="text" placeholder="License Plate" value="{{ row_data[0][3] }}" name="lno">
+  <br>                                        
+  <input type="text" placeholder="Status" value="{{ row_data[0][4] }}" name="status">
+  <br>                                        
+  <input type="text" placeholder="Description" value="{{ row_data[0][5] }}" name="description">
+  <br>
+  <button type="submit">Update Car</button>
+</form>
+
+{% endblock %}

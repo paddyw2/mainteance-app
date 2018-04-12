@@ -107,19 +107,25 @@ def cars_new():
 @require_login
 def car_available():
   #user_info = "[username]"
-  view = render_template("cars/available.html", data=user_info)
+  handler = car_handler()
+  # query_string should select ONLY available cars
+  query_string = "select * from car" 
+  rows = handler.select_query_values(query_string)
+  view = render_template("cars/available.html", row_data=rows)
   return view
 
 # Submission form for renting a car
 @app.route("/cars/rental_form")
 @require_login
 def car_rental_form():
+  view = render_template("cars/rental_form.html")
   return view
 
 # Submission form for buying a car
 @app.route("/cars/buy_form")
 @require_login
 def car_buy_form():
+  view = render_template("cars/buy_form.html")
   return view
 
 ############################################################################
@@ -156,6 +162,39 @@ def car_view(car_id):
   info = car_id
   view = render_template("cars/show.html", data=info, row_data=rows)
   return view
+
+# Edit car
+@app.route("/cars/<int:car_id>/edit")
+@require_login
+def car_edit(car_id):
+  handler = car_handler()
+  rows = handler.select_query_values("select * from car where vin_no="+str(car_id))
+  info = car_id
+  view = render_template("cars/edit.html", car_id=info, row_data=rows)
+  return view
+
+# Update car
+@app.route("/cars/<int:car_id>/update", methods=['POST'])
+@require_login
+def car_update(car_id):
+  handler = car_handler()
+  query_string = car.update_car(request.form)
+  handler.insert_values(query_string)
+  #view = render_template("cars/index.html", data=info)
+  view = redirect(url_for('car_view', car_id=request.form['vin'])) 
+  return view
+
+# Delete car
+@app.route("/cars/<int:car_id>/delete", methods=['POST'])
+@require_login
+def car_delete(car_id):
+  handler = car_handler()
+  rows = handler.insert_values("delete from car where vin_no="+str(car_id))
+  view = redirect(url_for('cars')) 
+  return view
+
+
+
 
 # Create Event - Functionality for creation visible per each car
 
@@ -201,6 +240,23 @@ def event_available_pos_create(car_id):
   view = redirect(url_for('event_new', car_id=info)) 
   return view
 
+@app.route("/events/pos/available/<int:event_id>/update", methods=['POST'])
+@require_login
+def event_available_pos_update(event_id):
+  handler = car_handler()
+  event_query = event.update_event(request.form, event_id)
+  handler.insert_values(event_query)
+  pos_query = pos.update_pos(request.form["assigned"], event_id)
+  handler.insert_values(pos_query)
+  # get pos_id
+  row = handler.select_query_values("select pos_id from pos where event_id="+str(event_id))
+  pos_id = row[0][0]
+  available_query = available.update_available(request.form, pos_id, "")
+  available_id = handler.insert_values(available_query)
+  view = redirect(url_for('event_view',event_id=event_id)) 
+  return view
+
+
 # Rental
 @app.route("/cars/<int:car_id>/events/pos/rental/new")
 @require_login
@@ -223,6 +279,23 @@ def event_rental_create(car_id):
   view = redirect(url_for('event_new', car_id=info)) 
   return view
 
+@app.route("/events/pos/rental/<int:event_id>/update", methods=['POST'])
+@require_login
+def event_rental_update(event_id):
+  handler = car_handler()
+  event_query = event.update_event(request.form, event_id)
+  handler.insert_values(event_query)
+  pos_query = pos.update_pos(request.form["assigned"], event_id)
+  handler.insert_values(pos_query)
+  # get pos_id
+  row = handler.select_query_values("select pos_id from pos where event_id="+str(event_id))
+  pos_id = row[0][0]
+  rental_query = rental.update_rental(request.form, pos_id)
+  rental_id = handler.insert_values(rental_query)
+  view = redirect(url_for('event_view',event_id=event_id)) 
+  return view
+
+
 # Sale
 @app.route("/cars/<int:car_id>/events/pos/sale/new")
 @require_login
@@ -244,6 +317,23 @@ def event_sale_create(car_id):
   info = car_id
   view = redirect(url_for('event_new', car_id=info)) 
   return view
+
+@app.route("/events/pos/sale/<int:event_id>/update", methods=['POST'])
+@require_login
+def event_sale_update(event_id):
+  handler = car_handler()
+  event_query = event.update_event(request.form, event_id)
+  handler.insert_values(event_query)
+  pos_query = pos.update_pos(request.form["assigned"], event_id)
+  handler.insert_values(pos_query)
+  # get pos_id
+  row = handler.select_query_values("select pos_id from pos where event_id="+str(event_id))
+  pos_id = row[0][0]
+  sale_query = sale.update_sale(request.form, pos_id)
+  sale_id = handler.insert_values(sale_query)
+  view = redirect(url_for('event_view',event_id=event_id)) 
+  return view
+
 
 #-------------------------#
 # Create Backroom Event
@@ -365,6 +455,30 @@ def event_view(event_id):
   view = render_template('events/'+event_type[0]+'/'+event_type[1]+'/view.html', row_data=row)
   return view
 
+@app.route("/events/<int:event_id>/edit")
+@require_login
+def event_edit(event_id):
+  handler = car_handler()
+  queries = event.view_events_all(event_id)
+  index = 0
+  for query in queries:
+    row = handler.select_query_values(query)
+    if(len(row) != 0):
+      break
+    else:
+      index += 1
+  event_type = event.get_type_event(index)
+  view = render_template('events/'+event_type[0]+'/'+event_type[1]+'/edit.html', row_data=row, event_id=event_id)
+  return view
+
+@app.route("/events/<int:event_id>/delete", methods=["POST"])
+@require_login
+def event_delete(event_id):
+  handler = car_handler()
+  rows = handler.insert_values("delete from event where event_id="+str(event_id))
+  view = redirect(url_for('homepage')) 
+  return view
+
 
 # Other routes
 
@@ -392,18 +506,6 @@ def event_results():
   rows = handler.select_query_values(query_string)
   view = render_template("events/results.html", row_data=rows)
   return view
-# Redirects to specific page dedicated to a single event for a car
-"""
-@app.route("/events/<int:event_id>")
-@require_login
-def event_view(event_id):
-  handler = car_handler()
-  rows = handler.select_query_values("select * from event where event_id ="+str(event_id))
-  info = event_id
-  view = render_template("events/show.html", data=info, row_data=rows)
-  return view
-  """
-
 
 @app.route("/customers")
 @require_login

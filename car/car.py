@@ -27,6 +27,32 @@ class car:
     print(query_string)
     return query_string
 
+  def update_car(post_values):
+    vin = post_values['vin']
+    make = post_values['make']
+    extra_values = ""
+    if(make != ""):
+      make = "make=\""+make+"\"" ","
+    model = post_values['model']
+    if(model != ""):
+      model = "model=\""+model+"\"" + ","
+    lno = post_values['lno']
+    if(lno != ""):
+      lno = "license_plate=\""+lno+"\"" + ","
+    status = post_values['status']
+    if(status != ""):
+      status = "status=\""+status+"\"" + ","
+    description = post_values['description']
+    if(description != ""):
+      description = "description=\""+description+"\"" + ","
+
+    # query
+    query_string = "update car set "+make+model+lno+status+description+" where vin_no="+vin+";"
+    query_string = query_string.replace(", where", " where")
+    print(query_string)
+    return query_string
+
+
   def search_car(post_values):
     vin = post_values['vin']
     if(vin != ""):

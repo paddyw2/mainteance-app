@@ -1,0 +1,17 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Edit Rental Event</h1>
+<form action="/events/pos/rental/{{ event_id }}/update" method="post">
+  {% include 'includes/event_form_edit.html' %}
+  {% include 'includes/pos_form_edit.html' %}
+  <input type="text" placeholder="Problems" name="problems" value="{{ row_data[0][13] }}">
+  <br>
+  <input type="text" placeholder="Estimated Return" name="est_return"  value="{{ row_data[0][14] }}">
+  <br>
+  <button type="submit">Update Repair Event</button>
+</form>
+
+{% endblock %}

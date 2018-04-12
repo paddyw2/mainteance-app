@@ -15,3 +15,16 @@ class rental:
     print(query_string)
     return query_string
 
+  def update_rental(post_values, pos_id):
+    problems = post_values['problems']
+    if(problems != ""):
+      problems = ",problems=\""+problems+"\""
+    est_return = post_values['est_return']
+    if(est_return != ""):
+      est_return = ",est_return=\""+est_return+"\""
+    # query
+    query_string = "update rental set pos_id="+str(pos_id)+problems+est_return+" where pos_id="+str(pos_id)+";"
+    query_string = query_string.replace(", where", " where")
+    print(query_string)
+    return query_string
+
