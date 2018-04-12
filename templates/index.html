@@ -2,9 +2,9 @@
 
 {% block content %}
 {% if data.get("is_admin") == 1 %}
-<h1>Car Maintenance and Rental History</h1>
+<h1>Car Maintenance and Rental History - Admin Mode</h1>
 {% else %}
-<h1>Welcome to super mega rental car golden palace</h1>
+<h1>Car Maintenance and Rental History</h1>
 {% endif %}
 <p>User: {{ data.get("fname") }}
 
@@ -13,14 +13,9 @@
 {% endif %}
 </p>
 
-
-{% if data.get("is_admin") == 1 %} <!--If the user is an admin -->
 <a href="/cars"><button>Cars</button></a>
 <a href="/events"><button>Events</button></a>
 <a href="/customers"><button>Customers</button></a>
 <a href="/users"><button>Users</button></a>
-{% else %}  <!-- Otherwise the user is a customer-->
-<a href="/cars/available"><button>Rent a car</button></a>
-{% endif %}
 
 {% endblock %}
