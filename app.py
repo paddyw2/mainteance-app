@@ -154,6 +154,29 @@ def car_view(car_id):
   view = render_template("cars/show.html", data=info, row_data=rows)
   return view
 
+# Edit car
+@app.route("/cars/<int:car_id>/edit")
+@require_login
+def car_edit(car_id):
+  handler = car_handler()
+  rows = handler.select_query_values("select * from car where vin_no="+str(car_id))
+  info = car_id
+  view = render_template("cars/edit.html", car_id=info, row_data=rows)
+  return view
+
+# Update car
+@app.route("/cars/<int:car_id>/update", methods=['POST'])
+@require_login
+def car_update(car_id):
+  handler = car_handler()
+  query_string = car.update_car(request.form)
+  handler.insert_values(query_string)
+  #view = render_template("cars/index.html", data=info)
+  view = redirect(url_for('car_view', car_id=request.form['vin'])) 
+  return view
+
+
+
 # Create Event - Functionality for creation visible per each car
 
 @app.route("/cars/<int:car_id>/events/new")
