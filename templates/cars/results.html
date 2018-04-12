@@ -18,11 +18,13 @@
   </tr>
 </table>
 
-<a href="/cars/{{ row[0] }}"><button>View</button></a>
-<a href="#"><button>Edit</button></a>
-<a href="#"><button>Delete</button></a>
-<a href="#"><button>View Car Events</button></a>
-<a href="#"><button>Create Car Event</button></a>
+<form action="/cars/{{ row[0] }}/delete" method="post">
+    <a href="/cars/{{ row[0] }}"><div class="button">View</div></a>
+    <a href="/cars/{{ row[0] }}/edit"><div class="button">Edit</div></a>
+    <button type="submit">Delete</button>
+    <a href="/cars/{{ row[0] }}/events/new"><div class="button">Create Car Event</div></a>
+</form>
+
 
 <br>
 {% endfor %}

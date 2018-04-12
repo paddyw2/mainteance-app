@@ -4,15 +4,13 @@
 
 
 <h1>Car</h1>
-
-<p>Car info:</p>
-<p>
-{% for row_value in row_data[0] %}
-
-{{ row_value }},
-
-{% endfor %}
-</p>
+  <p><strong>VIN:</strong> {{ row_data[0][0] }}</p>
+  <p><strong>Make:</strong> {{ row_data[0][1] }}</p>
+  <p><strong>Model:</strong> {{ row_data[0][2] }}</p>
+  <p><strong>License Plate:</strong> {{ row_data[0][3] }}</p>
+  <p><strong>Status:</strong> {{ row_data[0][4] }}</p>
+  <p><strong>Description:</strong> {{ row_data[0][5] }}</p>
+<!--
 <a href="/cars/{{ data }}/events/new">
   <button>
     Create Event
@@ -24,4 +22,5 @@
   </button>
 </form>
 
+-->
 {% endblock %}
