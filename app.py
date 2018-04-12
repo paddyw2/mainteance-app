@@ -8,6 +8,8 @@ from event.event import event
 from pos.pos import pos
 from sale.sale import sale
 from available.available import available
+from backroom.backroom import backroom
+from repair.repair import repair
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -168,8 +170,6 @@ def event_new(car_id):
 @app.route("/cars/<int:car_id>/events/pos/new")
 @require_login
 def event_pos_new(car_id):
-  handler = car_handler()
-  info = handler.insert_query("input")
   info = car_id
   view = render_template("events/pos/new.html", data=info)
   return view
@@ -200,8 +200,6 @@ def event_available_pos_create(car_id):
 @app.route("/cars/<int:car_id>/events/pos/rental/new")
 @require_login
 def event_rental_new(car_id):
-  handler = car_handler()
-  info = handler.insert_query("input")
   info = car_id
   view = render_template('events/pos/rental/new.html', car_id=info)
   return view
@@ -249,21 +247,32 @@ def event_sale_create(car_id):
 @app.route("/cars/<int:car_id>/events/backroom/new")
 @require_login
 def event_backroom_new(car_id):
-  handler = car_handler()
-  info = handler.insert_query("input")
   info = car_id
   view = render_template("events/backroom/new.html", data=info)
   return view
 
+# Repair
 @app.route("/cars/<int:car_id>/events/backroom/repair/new")
 @require_login
-def event_backroom_create(car_id):
-  handler = car_handler()
-  info = handler.insert_query("input")
+def event_repair(car_id):
   info = car_id
+  view = render_template("events/backroom/repair/new.html", car_id=info)
+  return view
 
+@app.route("/cars/<int:car_id>/events/backroom/repair/create", methods=['POST'])
+@require_login
+def event_repair_create(car_id):
+  handler = car_handler()
+  event_query = event.create_event(request.form, car_id, session.get("employee_no"))
+  event_id = handler.insert_values(event_query)
+  backroom_query = backroom.create_backroom(event_id, request.form["assigned"])
+  backroom_id = handler.insert_values(backroom_query)
+  repair_query = repair.create_repair(request.form, backroom_id)
+  repair_id = handler.insert_values(repair_query)
+  info = car_id
   view = redirect(url_for('event_new', car_id=info)) 
   return view
+
 
 #----------------
 # Event

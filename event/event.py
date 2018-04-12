@@ -74,7 +74,7 @@ class event:
       event_type[1] = event.pos_tables[index]
     else:
       event_type[0] = "backroom"
-      event_type[1] = event.backroom_tables[index]
+      event_type[1] = event.backroom_tables[index-3]
 
     return event_type
 
