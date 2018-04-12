@@ -102,22 +102,24 @@ def cars_new():
 ############################################################################
 
 # Displays list of available cars that a user can choose to rent (or possibly buy) from
-@app.route("/cars/rental")
+@app.route("/cars/available")
 @require_login
-def car_rental():
-  return true
+def car_available():
+  #user_info = "[username]"
+  view = render_template("cars/available.html", data=user_info)
+  return view
 
 # Submission form for renting a car
 @app.route("/cars/rental_form")
 @require_login
 def car_rental_form():
-  return true
+  return view
 
 # Submission form for buying a car
 @app.route("/cars/buy_form")
 @require_login
 def car_buy_form():
-  return true
+  return view
 
 ############################################################################
 
