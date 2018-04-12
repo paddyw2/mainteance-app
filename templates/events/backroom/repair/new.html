@@ -1,0 +1,19 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Create New Repair Event</h1>
+<form action="/cars/{{ car_id }}/events/backroom/repair/create" method="post">
+  {% include 'includes/event_form.html' %}
+  {% include 'includes/backroom_form.html' %}
+  <input type="text" placeholder="Est. Finish Date" name="est_finish_date">
+  <br>
+  <input type="text" placeholder="Description" name="description">
+  <br>
+  <input type="text" placeholder="Parts List" name="parts_list">
+  <br>
+  <button type="submit">Create Repair Event</button>
+</form>
+
+{% endblock %}

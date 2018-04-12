@@ -2,6 +2,16 @@ from flask import Flask, render_template, redirect, url_for, request, session, g
 from functools import wraps
 from handlers.car_handler import car_handler
 import os
+from rental.rental import rental
+from car.car import car
+from event.event import event
+from pos.pos import pos
+from sale.sale import sale
+from available.available import available
+from backroom.backroom import backroom
+from repair.repair import repair
+from inspection.inspection import inspection
+from writeoff.writeoff import writeoff
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -118,30 +128,7 @@ def car_buy_form():
 @require_login
 def car_results():
   handler = car_handler()
-  # TODO: parse post parameters and include in query
-  vin = request.form['vin']
-  if(vin != ""):
-    vin = " vin_no="+vin
-  make = request.form['make']
-  if(make != ""):
-    make = " and make=\""+make+"\""
-  model = request.form['model']
-  if(model != ""):
-    model = " and model=\""+model+"\""
-  lno = request.form['lno']
-  if(lno != ""):
-    lno = " and license_plate=\""+lno+"\""
-  status = request.form['status']
-  if(status != ""):
-    status = " and status=\""+status+"\""
-  description = request.form['description']
-  if(description != ""):
-    description = " and description=\""+description+"\""
-  # query
-  query_string = "select * from car where"+vin+make+model+lno+status+description
-  if("where and" in query_string):
-    query_string = query_string.replace("where and", "where")
-  print(query_string)
+  query_string = car.search_car(request.form)
   rows = handler.select_query_values(query_string)
   view = render_template("cars/results.html", row_data=rows)
   return view
@@ -152,31 +139,7 @@ def car_results():
 @require_login
 def car_new_post():
   handler = car_handler()
-  vin = request.form['vin'] + ","
-  make = request.form['make']
-  extra_values = ""
-  if(make != ""):
-    make = "\""+make+"\"" ","
-    extra_values += ", make"
-  model = request.form['model']
-  if(model != ""):
-    model = "\""+model+"\"" + ","
-    extra_values += ", model"
-  lno = request.form['lno']
-  lno = "\""+lno+"\"" + ","
-  status = request.form['status']
-  if(status != ""):
-    status = "\""+status+"\"" + ","
-    extra_values += ", status"
-  description = request.form['description']
-  if(description != ""):
-    description = "\""+description+"\"" + ","
-    extra_values += ", description"
-
-  # query
-  query_string = "insert into car(vin_no, license_plate"+extra_values+") values("+vin+make+model+lno+status+description+");"
-  query_string = query_string.replace(",)", ")")
-  print(query_string)
+  query_string = car.create_car(request.form)
   handler.insert_values(query_string)
   #view = render_template("cars/index.html", data=info)
   view = redirect(url_for('car_view', car_id=request.form['vin'])) 
@@ -204,93 +167,232 @@ def event_new(car_id):
   view = render_template("events/new.html", data=info)
   return view
 
+#-------------------------#
 # Create POS Event
+#-------------------------#
 
 @app.route("/cars/<int:car_id>/events/pos/new")
 @require_login
 def event_pos_new(car_id):
-  handler = car_handler()
-  info = handler.insert_query("input")
   info = car_id
   view = render_template("events/pos/new.html", data=info)
   return view
 
-@app.route("/cars/<int:car_id>/events/pos/create", methods=['POST'])
+# Available
+@app.route("/cars/<int:car_id>/events/pos/available/new")
 @require_login
-def event_pos_create(car_id):
-  handler = car_handler()
-  info = handler.insert_query("input")
+def event_available_pos_new(car_id):
   info = car_id
+  view = render_template('events/pos/available/new.html', car_id=info)
+  return view
 
+@app.route("/cars/<int:car_id>/events/pos/available/create", methods=['POST'])
+@require_login
+def event_available_pos_create(car_id):
+  handler = car_handler()
+  event_query = event.create_event(request.form, car_id, session.get("employee_no"))
+  event_id = handler.insert_values(event_query)
+  pos_query = pos.create_pos(event_id, request.form["assigned"])
+  pos_id = handler.insert_values(pos_query)
+  available_query = available.create_available(request.form, pos_id, "")
+  available_id = handler.insert_values(available_query)
+  info = car_id
   view = redirect(url_for('event_new', car_id=info)) 
   return view
 
+# Rental
+@app.route("/cars/<int:car_id>/events/pos/rental/new")
+@require_login
+def event_rental_new(car_id):
+  info = car_id
+  view = render_template('events/pos/rental/new.html', car_id=info)
+  return view
+
+@app.route("/cars/<int:car_id>/events/pos/rental/create", methods=['POST'])
+@require_login
+def event_rental_create(car_id):
+  handler = car_handler()
+  event_query = event.create_event(request.form, car_id, session.get("employee_no"))
+  event_id = handler.insert_values(event_query)
+  pos_query = pos.create_pos(event_id, request.form["assigned"])
+  pos_id = handler.insert_values(pos_query)
+  rental_query = rental.create_rental(request.form, pos_id)
+  rental_id = handler.insert_values(rental_query)
+  info = car_id
+  view = redirect(url_for('event_new', car_id=info)) 
+  return view
+
+# Sale
+@app.route("/cars/<int:car_id>/events/pos/sale/new")
+@require_login
+def event_sale_new(car_id):
+  info = car_id
+  view = render_template('events/pos/sale/new.html', car_id=info)
+  return view
+
+@app.route("/cars/<int:car_id>/events/pos/sale/create", methods=['POST'])
+@require_login
+def event_sale_create(car_id):
+  handler = car_handler()
+  event_query = event.create_event(request.form, car_id, session.get("employee_no"))
+  event_id = handler.insert_values(event_query)
+  pos_query = pos.create_pos(event_id, request.form["assigned"])
+  pos_id = handler.insert_values(pos_query)
+  sale_query = sale.create_sale(request.form, pos_id)
+  sale_id = handler.insert_values(sale_query)
+  info = car_id
+  view = redirect(url_for('event_new', car_id=info)) 
+  return view
+
+#-------------------------#
 # Create Backroom Event
+#-------------------------#
 
 @app.route("/cars/<int:car_id>/events/backroom/new")
 @require_login
 def event_backroom_new(car_id):
-  handler = car_handler()
-  info = handler.insert_query("input")
   info = car_id
   view = render_template("events/backroom/new.html", data=info)
   return view
 
-@app.route("/cars/<int:car_id>/events/backroom/create", methods=['POST'])
+# Repair
+@app.route("/cars/<int:car_id>/events/backroom/repair/new")
 @require_login
-def event_backroom_create(car_id):
-  handler = car_handler()
-  info = handler.insert_query("input")
+def event_repair(car_id):
   info = car_id
+  view = render_template("events/backroom/repair/new.html", car_id=info)
+  return view
 
+@app.route("/cars/<int:car_id>/events/backroom/repair/create", methods=['POST'])
+@require_login
+def event_repair_create(car_id):
+  handler = car_handler()
+  event_query = event.create_event(request.form, car_id, session.get("employee_no"))
+  event_id = handler.insert_values(event_query)
+  backroom_query = backroom.create_backroom(event_id, request.form["assigned"])
+  backroom_id = handler.insert_values(backroom_query)
+  repair_query = repair.create_repair(request.form, backroom_id)
+  repair_id = handler.insert_values(repair_query)
+  info = car_id
   view = redirect(url_for('event_new', car_id=info)) 
   return view
+
+# Inspection
+@app.route("/cars/<int:car_id>/events/backroom/inspection/new")
+@require_login
+def event_inspection(car_id):
+  info = car_id
+  view = render_template("events/backroom/inspection/new.html", car_id=info)
+  return view
+
+@app.route("/cars/<int:car_id>/events/backroom/inspection/create", methods=['POST'])
+@require_login
+def event_inspection_create(car_id):
+  handler = car_handler()
+  event_query = event.create_event(request.form, car_id, session.get("employee_no"))
+  event_id = handler.insert_values(event_query)
+  backroom_query = backroom.create_backroom(event_id, request.form["assigned"])
+  backroom_id = handler.insert_values(backroom_query)
+  inspection_query = inspection.create_inspection(request.form, backroom_id)
+  inspection_id = handler.insert_values(inspection_query)
+  info = car_id
+  view = redirect(url_for('event_new', car_id=info)) 
+  return view
+
+# Write Off
+@app.route("/cars/<int:car_id>/events/backroom/writeoff/new")
+@require_login
+def event_writeoff(car_id):
+  info = car_id
+  view = render_template("events/backroom/writeoff/new.html", car_id=info)
+  return view
+
+@app.route("/cars/<int:car_id>/events/backroom/writeoff/create", methods=['POST'])
+@require_login
+def event_writeoff_create(car_id):
+  handler = car_handler()
+  event_query = event.create_event(request.form, car_id, session.get("employee_no"))
+  event_id = handler.insert_values(event_query)
+  backroom_query = backroom.create_backroom(event_id, request.form["assigned"])
+  backroom_id = handler.insert_values(backroom_query)
+  writeoff_query = writeoff.create_writeoff(request.form, backroom_id)
+  writeoff_id = handler.insert_values(writeoff_query)
+  info = car_id
+  view = redirect(url_for('event_new', car_id=info)) 
+  return view
+
+# Available
+@app.route("/cars/<int:car_id>/events/backroom/available/new")
+@require_login
+def event_available(car_id):
+  info = car_id
+  view = render_template("events/backroom/available/new.html", car_id=info)
+  return view
+
+@app.route("/cars/<int:car_id>/events/backroom/available/create", methods=['POST'])
+@require_login
+def event_available_create(car_id):
+  handler = car_handler()
+  event_query = event.create_event(request.form, car_id, session.get("employee_no"))
+  event_id = handler.insert_values(event_query)
+  backroom_query = backroom.create_backroom(event_id, request.form["assigned"])
+  backroom_id = handler.insert_values(backroom_query)
+  available_query = available.create_available(request.form, "", backroom_id)
+  available_id = handler.insert_values(available_query)
+  info = car_id
+  view = redirect(url_for('event_new', car_id=info)) 
+  return view
+
+
+#----------------
+# Event
+#----------------
+
+@app.route("/events/<int:event_id>")
+@require_login
+def event_view(event_id):
+  handler = car_handler()
+  queries = event.view_events_all(event_id)
+  index = 0
+  for query in queries:
+    row = handler.select_query_values(query)
+    if(len(row) != 0):
+      break
+    else:
+      index += 1
+  event_type = event.get_type_event(index)
+  view = render_template('events/'+event_type[0]+'/'+event_type[1]+'/view.html', row_data=row)
+  return view
+
 
 # Other routes
 
 @app.route("/events")
 @require_login
 def events():
-  view = render_template("events/index.html")
+  handler = car_handler()
+  rows = handler.select_query_values("select * from event;")
+  view = render_template("events/results.html", row_data=rows)
   return view
+
+@app.route("/events/search")
+@require_login
+def event_search():
+  view = render_template("events/search.html")
+  return view
+
 
 # Displays list of events based on search parameters
 @app.route("/events/results", methods=['POST'])
 @require_login
-def events_results():
+def event_results():
   handler = car_handler()
-  # TODO: parse post parameters and include in query
-  vin = request.form['vin']
-  if(vin != ""):
-    vin = " car_vin="+vin
-  createdBY = request.form['created_by']
-  if(createdBY != ""):
-    createdBY = " and created_by=\""+createdBY+"\""
-  title = request.form['title']
-  if(title != ""):
-    title = " and title=\""+title+"\""
-  startDate = request.form['start_date']
-  if(startDate != ""):
-    startDate = " and start_date=\""+start_date+"\""
-  endDate = request.form['end_date']
-  if(endDate != ""):
-    endData = " and end_date=\""+end_date+"\""
-  status = request.form['status']
-  if(status != ""):
-    status = " and status=\""+status+"\""
-  description = request.form['description']
-  if(description != ""):
-    description = " and description=\""+description+"\""
-  # query
-  query_string = "select * from event where"+vin+createdBY+title+startDate+endDate+status+description
-  if("where and" in query_string):
-    query_string = query_string.replace("where and", "where")
-  print(query_string)
+  query_string = event.search_event(request.form)
   rows = handler.select_query_values(query_string)
   view = render_template("events/results.html", row_data=rows)
   return view
-
 # Redirects to specific page dedicated to a single event for a car
+"""
 @app.route("/events/<int:event_id>")
 @require_login
 def event_view(event_id):
@@ -299,6 +401,7 @@ def event_view(event_id):
   info = event_id
   view = render_template("events/show.html", data=info, row_data=rows)
   return view
+  """
 
 
 @app.route("/customers")

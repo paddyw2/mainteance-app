@@ -113,7 +113,7 @@ create table if not exists rental (
 create table if not exists sale (
     sale_id int(32) not null auto_increment,
     pos_id int(32) not null,
-    price int(100),
+    price varchar(32),
     primary key(sale_id),
     foreign key fk_pos(pos_id)
     references pos(pos_id)
@@ -126,7 +126,7 @@ create table if not exists available (
     available_id int(32) not null auto_increment,
     pos_id int(32),
     backroom_id int(32),
-    sale_price int(100),
+    sale_price varchar(32),
     car_condition varchar(25),
     next_repair date,
     primary key(available_id),

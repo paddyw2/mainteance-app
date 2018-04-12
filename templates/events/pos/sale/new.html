@@ -1,0 +1,15 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Create New Sale Event</h1>
+<form action="/cars/{{ car_id }}/events/pos/sale/create" method="post">
+  {% include 'includes/event_form.html' %}
+  {% include 'includes/pos_form.html' %}
+  <input type="text" placeholder="Price" name="price">
+  <br>
+  <button type="submit">Create Sale Event</button>
+</form>
+
+{% endblock %}

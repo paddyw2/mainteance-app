@@ -1,0 +1,19 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Create New Available Event</h1>
+<form action="/cars/{{ car_id }}/events/pos/available/create" method="post">
+  {% include 'includes/event_form.html' %}
+  {% include 'includes/pos_form.html' %}
+  <input type="text" placeholder="Condition" name="car_condition">
+  <br>
+  <input type="text" placeholder="Sale Price" name="sale_price">
+  <br>
+  <input type="text" placeholder="Next Repair" name="next_repair">
+  <br>
+  <button type="submit">Create Available Event</button>
+</form>
+
+{% endblock %}

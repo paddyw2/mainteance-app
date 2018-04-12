@@ -1,0 +1,17 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Create New Rental Event</h1>
+<form action="/cars/{{ car_id }}/events/pos/rental/create" method="post">
+  {% include 'includes/event_form.html' %}
+  {% include 'includes/pos_form.html' %}
+  <input type="text" placeholder="Problems" name="problems">
+  <br>
+  <input type="text" placeholder="Estimated Return" name="est_return">
+  <br>
+  <button type="submit">Create Repair Event</button>
+</form>
+
+{% endblock %}

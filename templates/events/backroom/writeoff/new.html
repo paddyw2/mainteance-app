@@ -1,0 +1,15 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Create New Write Off Event</h1>
+<form action="/cars/{{ car_id }}/events/backroom/writeoff/create" method="post">
+  {% include 'includes/event_form.html' %}
+  {% include 'includes/backroom_form.html' %}
+  <input type="text" placeholder="Reason" name="reason">
+  <br>
+  <button type="submit">Create Write Off Event</button>
+</form>
+
+{% endblock %}
