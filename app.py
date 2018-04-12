@@ -269,7 +269,8 @@ def event_available_pos_create(car_id):
   available_query = available.create_available(request.form, pos_id, "")
   available_id = handler.insert_values(available_query)
   info = car_id
-  view = redirect(url_for('event_new', car_id=info)) 
+
+  view = redirect(url_for('event_view', event_id=event_id)) 
   return view
 
 @app.route("/events/pos/available/<int:event_id>/update", methods=['POST'])
@@ -308,7 +309,8 @@ def event_rental_create(car_id):
   rental_query = rental.create_rental(request.form, pos_id)
   rental_id = handler.insert_values(rental_query)
   info = car_id
-  view = redirect(url_for('event_new', car_id=info)) 
+
+  view = redirect(url_for('event_view', event_id=event_id)) 
   return view
 
 @app.route("/events/pos/rental/<int:event_id>/update", methods=['POST'])
@@ -347,7 +349,7 @@ def event_sale_create(car_id):
   sale_query = sale.create_sale(request.form, pos_id)
   sale_id = handler.insert_values(sale_query)
   info = car_id
-  view = redirect(url_for('event_new', car_id=info)) 
+  view = redirect(url_for('event_view',event_id=event_id)) 
   return view
 
 @app.route("/events/pos/sale/<int:event_id>/update", methods=['POST'])
@@ -397,7 +399,7 @@ def event_repair_create(car_id):
   repair_query = repair.create_repair(request.form, backroom_id)
   repair_id = handler.insert_values(repair_query)
   info = car_id
-  view = redirect(url_for('event_new', car_id=info)) 
+  view = redirect(url_for('event_view',event_id=event_id)) 
   return view
 
 @app.route("/events/backroom/repair/<int:event_id>/update", methods=['POST'])
@@ -435,7 +437,7 @@ def event_inspection_create(car_id):
   inspection_query = inspection.create_inspection(request.form, backroom_id)
   inspection_id = handler.insert_values(inspection_query)
   info = car_id
-  view = redirect(url_for('event_new', car_id=info)) 
+  view = redirect(url_for('event_view',event_id=event_id)) 
   return view
 
 @app.route("/events/backroom/inspection/<int:event_id>/update", methods=['POST'])
@@ -475,7 +477,8 @@ def event_writeoff_create(car_id):
   writeoff_query = writeoff.create_writeoff(request.form, backroom_id)
   writeoff_id = handler.insert_values(writeoff_query)
   info = car_id
-  view = redirect(url_for('event_new', car_id=info)) 
+
+  view = redirect(url_for('event_view',event_id=event_id)) 
   return view
 
 @app.route("/events/backroom/writeoff/<int:event_id>/update", methods=['POST'])
@@ -515,7 +518,8 @@ def event_available_backroom_create(car_id):
   available_query = available.create_available(request.form, "", backroom_id)
   available_id = handler.insert_values(available_query)
   info = car_id
-  view = redirect(url_for('event_new', car_id=info)) 
+
+  view = redirect(url_for('event_view',event_id=event_id)) 
   return view
 
 @app.route("/events/backroom/available/<int:event_id>/update", methods=['POST'])
