@@ -104,29 +104,54 @@ class event:
   def search_event(post_values):
     vin = post_values['vin']
     if(vin != ""):
-      vin = " car_vin="+vin
+      vin = " e.car_vin="+vin
     createdBY = post_values['created_by']
     if(createdBY != ""):
-      createdBY = " and created_by=\""+createdBY+"\""
+      createdBY = " and e.created_by=\""+createdBY+"\""
     title = post_values['title']
     if(title != ""):
-      title = " and title=\""+title+"\""
+      title = " and e.title=\""+title+"\""
     startDate = post_values['start_date']
     if(startDate != ""):
-      startDate = " and start_date=\""+start_date+"\""
+      startDate = " and e.start_date=\""+start_date+"\""
     endDate = post_values['end_date']
     if(endDate != ""):
-      endData = " and end_date=\""+end_date+"\""
+      endData = " and e.end_date=\""+end_date+"\""
     status = post_values['status']
     if(status != ""):
-      status = " and status=\""+status+"\""
+      status = " and e.status=\""+status+"\""
     description = post_values['description']
     if(description != ""):
-      description = " and description=\""+description+"\""
-    # query
-    query_string = "select * from event where"+vin+createdBY+title+startDate+endDate+status+description
+      description = " and e.description=\""+description+"\""
+
+    if(post_values["event_type"] == "All Event Types"):
+        query_end = ""
+    elif(post_values["event_type"] == "Sale"):
+      event_type = "sale"
+      query_end = " and exists(select * from pos as p, "+event_type+" as s where p.event_id=e.event_id and s.pos_id=p.pos_id)"
+    elif(post_values["event_type"] == "Rental"):
+      event_type = "rental"
+      query_end = " and exists(select * from pos as p, "+event_type+" as s where p.event_id=e.event_id and s.pos_id=p.pos_id)"
+    elif(post_values["event_type"] == "Available"):
+      event_type = "available"
+      part_one = " and exists(select * from pos as p, "+event_type+" as s where p.event_id=e.event_id and s.pos_id=p.pos_id) or"
+      part_two = " exists(select * from backroom as b, "+event_type+" as s where b.event_id=e.event_id and s.backroom_id=b.backroom_id)"
+      query_end = part_one + part_two
+    elif(post_values["event_type"] == "Repair"):
+      event_type = "repair"
+      query_end = " and exists(select * from backroom as b, "+event_type+" as s where b.event_id=e.event_id and s.backroom_id=b.backroom_id)"
+    elif(post_values["event_type"] == "Inspection"):
+      event_type = "inspection"
+      query_end = " and exists(select * from backroom as b, "+event_type+" as s where b.event_id=e.event_id and s.backroom_id=b.backroom_id)"
+    elif(post_values["event_type"] == "Write Off"):
+      event_type = "writeoff"
+      query_end = " and exists(select * from backroom as b, "+event_type+" as s where b.event_id=e.event_id and s.backroom_id=b.backroom_id)"
+    else:
+      query_end = ""
+
+        # query
+    query_string = "select * from event as e where"+vin+createdBY+title+startDate+endDate+status+description + query_end
     if("where and" in query_string):
       query_string = query_string.replace("where and", "where")
     print(query_string)
     return query_string
-
