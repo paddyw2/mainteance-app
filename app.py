@@ -637,6 +637,16 @@ def customers_search():
   view = render_template("customers/results.html", row_data=rows)
   return view
 
+# Delete customer
+@app.route("/customers/<int:cust_id>/delete", methods=['POST'])
+@require_login
+def customer_delete(cust_id):
+  handler = car_handler()
+  rows = handler.insert_values("delete from customer where license_no=\""+str(cust_id)+"\"")
+  view = redirect(url_for('customers')) 
+  return view
+
+
 @app.route("/users")
 @require_login
 @require_admin
