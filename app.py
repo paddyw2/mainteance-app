@@ -233,15 +233,15 @@ def event_available_pos_create(car_id):
   view = redirect(url_for('event_new', car_id=info)) 
   return view
 
-@app.route("/cars/<int:car_id>/events/pos/available/update", methods=['POST'])
+@app.route("/events/pos/available/<int:event_id>/update", methods=['POST'])
 @require_login
-def event_available_pos_create(car_id):
+def event_available_pos_update(event_id):
   handler = car_handler()
-  event_query = event.update_event(request.form)
-  event_id = handler.insert_values(event_query)
-  pos_query = pos.update_pos(request.form["assigned"])
+  event_query = event.update_event(request.form, event_id)
+  handler.insert_values(event_query)
+  pos_query = pos.update_pos(request.form["assigned"], event_id)
   pos_id = handler.insert_values(pos_query)
-  available_query = available.update_available(request.form)
+  available_query = available.update_available(request.form, pos_id)
   available_id = handler.insert_values(available_query)
   info = car_id
   view = redirect(url_for('event_new', car_id=info)) 
@@ -425,7 +425,7 @@ def event_edit(event_id):
     else:
       index += 1
   event_type = event.get_type_event(index)
-  view = render_template('events/'+event_type[0]+'/'+event_type[1]+'/edit.html', row_data=row)
+  view = render_template('events/'+event_type[0]+'/'+event_type[1]+'/edit.html', row_data=row, event_id=event_id)
   return view
 
 @app.route("/events/<int:event_id>/delete", methods=["POST"])

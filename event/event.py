@@ -32,6 +32,29 @@ class event:
     print(query_string)
     return query_string
 
+  def update_event(post_values, event_id):
+    title = post_values['title']
+    if(title != ""):
+      title = "title=\""+title+"\","
+    start_date = post_values['start_date']
+    if(start_date != ""):
+      start_date = "start_date=\""+start_date+"\","
+    end_date = post_values['end_date']
+    if(end_date != ""):
+      end_date = "end_date=\""+end_date+"\","
+    status = post_values['status']
+    if(status != ""):
+      status = "status=\""+status+"\","
+    description = post_values['description']
+    if(description != ""):
+      description = "description=\""+description+"\","
+    # query
+    query_string = "update event set "+title+start_date+end_date+status+description+" where event_id="+str(event_id)+";"
+    query_string = query_string.replace(", where", " where")
+    print(query_string)
+    return query_string
+
+
   def view_events_all(event_id):
     list_of_queries = []
     for event_type in event.pos_tables:
