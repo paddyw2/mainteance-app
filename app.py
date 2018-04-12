@@ -233,6 +233,21 @@ def event_available_pos_create(car_id):
   view = redirect(url_for('event_new', car_id=info)) 
   return view
 
+@app.route("/cars/<int:car_id>/events/pos/available/update", methods=['POST'])
+@require_login
+def event_available_pos_create(car_id):
+  handler = car_handler()
+  event_query = event.update_event(request.form)
+  event_id = handler.insert_values(event_query)
+  pos_query = pos.update_pos(request.form["assigned"])
+  pos_id = handler.insert_values(pos_query)
+  available_query = available.update_available(request.form)
+  available_id = handler.insert_values(available_query)
+  info = car_id
+  view = redirect(url_for('event_new', car_id=info)) 
+  return view
+
+
 # Rental
 @app.route("/cars/<int:car_id>/events/pos/rental/new")
 @require_login
@@ -397,6 +412,30 @@ def event_view(event_id):
   view = render_template('events/'+event_type[0]+'/'+event_type[1]+'/view.html', row_data=row)
   return view
 
+@app.route("/events/<int:event_id>/edit")
+@require_login
+def event_edit(event_id):
+  handler = car_handler()
+  queries = event.view_events_all(event_id)
+  index = 0
+  for query in queries:
+    row = handler.select_query_values(query)
+    if(len(row) != 0):
+      break
+    else:
+      index += 1
+  event_type = event.get_type_event(index)
+  view = render_template('events/'+event_type[0]+'/'+event_type[1]+'/edit.html', row_data=row)
+  return view
+
+@app.route("/events/<int:event_id>/delete", methods=["POST"])
+@require_login
+def event_delete(event_id):
+  handler = car_handler()
+  rows = handler.insert_values("delete from event where event_id="+str(event_id))
+  view = redirect(url_for('homepage')) 
+  return view
+
 
 # Other routes
 
@@ -424,18 +463,6 @@ def event_results():
   rows = handler.select_query_values(query_string)
   view = render_template("events/results.html", row_data=rows)
   return view
-# Redirects to specific page dedicated to a single event for a car
-"""
-@app.route("/events/<int:event_id>")
-@require_login
-def event_view(event_id):
-  handler = car_handler()
-  rows = handler.select_query_values("select * from event where event_id ="+str(event_id))
-  info = event_id
-  view = render_template("events/show.html", data=info, row_data=rows)
-  return view
-  """
-
 
 @app.route("/customers")
 def customers():
