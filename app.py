@@ -26,8 +26,10 @@ app.secret_key = os.urandom(32)
 def load_login_status():
   try:
     g.login_status = session.get("logged_in")
+    g.admin = session.get("is_admin")
   except:
     g.login_status = False
+    g.admin = 0
 
 # returns the decorated function
 # only if the login status is
@@ -39,6 +41,18 @@ def require_login(function):
       return function(*args, **kwargs)
     else:
       return redirect(url_for("login"))
+  return decorator
+
+# returns the decorated function
+# only if the login status is
+# true
+def require_admin(function):
+  @wraps(function)
+  def decorator(*args, **kwargs):
+    if(g.admin == 1):
+      return function(*args, **kwargs)
+    else:
+      return redirect(url_for("homepage"))
   return decorator
 
 # gets the users posted login information
@@ -625,6 +639,7 @@ def customers_search():
 
 @app.route("/users")
 @require_login
+@require_admin
 def users():
   user_info = session
   view = render_template("users/index.html", data=user_info)
@@ -632,6 +647,7 @@ def users():
 
 @app.route("/users/results", methods=['POST'])
 @require_login
+@require_admin
 def users_search():
   handler = car_handler()
   query_string = user.search_user(request.form)
@@ -641,12 +657,14 @@ def users_search():
 
 @app.route("/users/create")
 @require_login
+@require_admin
 def users_create():
   view = render_template("users/create.html")
   return view
 
 @app.route("/users/created", methods=['POST'])
 @require_login
+@require_admin
 def users_created():
   handler = car_handler()
   if (request.form['employee_no'] != ""):

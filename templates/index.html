@@ -1,11 +1,7 @@
 {% extends "includes/layout.html" %}
 
 {% block content %}
-{% if data.get("is_admin") == 1 %}
-<h1>Car Maintenance and Rental History - Admin Mode</h1>
-{% else %}
 <h1>Car Maintenance and Rental History</h1>
-{% endif %}
 <p>User: {{ data.get("fname") }}
 
 {% if data.get("is_admin") == 1 %}
@@ -16,6 +12,8 @@
 <a href="/cars"><button>Cars</button></a>
 <a href="/events"><button>Events</button></a>
 <a href="/customers"><button>Customers</button></a>
+{% if data.get("is_admin") == 1 %}
 <a href="/users"><button>Users</button></a>
+{% endif %}
 
 {% endblock %}
