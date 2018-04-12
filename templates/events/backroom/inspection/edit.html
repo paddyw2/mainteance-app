@@ -1,0 +1,21 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Edit Inspection Event</h1>
+<form action="/events/backroom/inspection/{{ event_id }}/update" method="post">
+  {% include 'includes/event_form_edit.html' %}
+  {% include 'includes/backroom_form_edit.html' %}
+
+  <input type="text" placeholder="Est. Finish Date" name="est_finish_date" value="{{ row_data[0][13] }}">
+  <br>
+  <input type="text" placeholder="Next Inspection" name="next_inspection" value="{{ row_data[0][14] }}">
+  <br>
+  <input type="text" placeholder="Work Done" name="work_done" value="{{ row_data[0][15] }}">
+  <br>
+
+  <button type="submit">Update Inspection Event</button>
+</form>
+
+{% endblock %}

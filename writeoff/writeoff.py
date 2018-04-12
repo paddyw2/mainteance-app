@@ -12,3 +12,13 @@ class writeoff:
     print(query_string)
     return query_string
 
+  def update_writeoff(post_values, backroom_id):
+    reason = post_values['reason']
+    if(reason != ""):
+      reason = ",reason=\""+reason+"\""
+
+    # query
+    query_string = "update writeoff set backroom_id="+str(backroom_id)+reason+" where backroom_id="+str(backroom_id)+";"
+    print(query_string)
+    return query_string
+

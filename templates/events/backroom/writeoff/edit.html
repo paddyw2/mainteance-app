@@ -1,0 +1,16 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Edit Write Off Event</h1>
+<form action="/events/backroom/writeoff/{{ event_id }}/update" method="post">
+  {% include 'includes/event_form_edit.html' %}
+  {% include 'includes/backroom_form_edit.html' %}
+  <input type="text" placeholder="Reason" name="reason" value="{{ row_data[0][13] }}">
+  <br>
+
+  <button type="submit">Update Write Off Event</button>
+</form>
+
+{% endblock %}

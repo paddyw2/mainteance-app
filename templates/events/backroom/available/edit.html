@@ -4,7 +4,7 @@
 
 
 <h1>Edit Available Event</h1>
-<form action="/events/pos/available/{{ event_id }}/update" method="post">
+<form action="/events/backroom/available/{{ event_id }}/update" method="post">
   {% include 'includes/event_form_edit.html' %}
   {% include 'includes/pos_form_edit.html' %}
   <input type="text" placeholder="Condition" name="car_condition" value="{{ row_data[0][15] }}">
