@@ -155,4 +155,3 @@ class event:
       query_string = query_string.replace("where and", "where")
     print(query_string)
     return query_string
-
