@@ -368,19 +368,27 @@ def event_view(event_id):
 @app.route("/events")
 @require_login
 def events():
-  view = render_template("events/index.html")
+  handler = car_handler()
+  rows = handler.select_query_values("select * from event;")
+  view = render_template("events/results.html", row_data=rows)
   return view
+
+@app.route("/events/search")
+@require_login
+def event_search():
+  view = render_template("events/search.html")
+  return view
+
 
 # Displays list of events based on search parameters
 @app.route("/events/results", methods=['POST'])
 @require_login
-def events_results():
+def event_results():
   handler = car_handler()
-  query_string = event.create_event(request.form, request.form["vin"], session.get("employee_no"))
+  query_string = event.search_event(request.form)
   rows = handler.select_query_values(query_string)
   view = render_template("events/results.html", row_data=rows)
   return view
-
 # Redirects to specific page dedicated to a single event for a car
 """
 @app.route("/events/<int:event_id>")

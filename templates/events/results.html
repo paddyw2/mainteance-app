@@ -3,10 +3,13 @@
 {% block content %}
 
 
-<h1>Event Results</h1>
+<h1>Events</h1>
+<a href="/events/search">
+    <button>Search Events</button>
+</a>
 {% if row_data|length == 0 %}
 
-<p>No results found</p>
+<p>No events found</p>
 
 {% else %}
 
@@ -21,7 +24,6 @@
 <a href="/events/{{ row[0] }}"><button>View</button></a>
 <a href="#"><button>Edit</button></a>
 <a href="#"><button>Delete</button></a>
-<a href="#"><button>Create Event</button></a>
 
 <br>
 

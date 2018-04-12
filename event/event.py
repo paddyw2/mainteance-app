@@ -78,3 +78,32 @@ class event:
 
     return event_type
 
+  def search_event(post_values):
+    vin = post_values['vin']
+    if(vin != ""):
+      vin = " car_vin="+vin
+    createdBY = post_values['created_by']
+    if(createdBY != ""):
+      createdBY = " and created_by=\""+createdBY+"\""
+    title = post_values['title']
+    if(title != ""):
+      title = " and title=\""+title+"\""
+    startDate = post_values['start_date']
+    if(startDate != ""):
+      startDate = " and start_date=\""+start_date+"\""
+    endDate = post_values['end_date']
+    if(endDate != ""):
+      endData = " and end_date=\""+end_date+"\""
+    status = post_values['status']
+    if(status != ""):
+      status = " and status=\""+status+"\""
+    description = post_values['description']
+    if(description != ""):
+      description = " and description=\""+description+"\""
+    # query
+    query_string = "select * from event where"+vin+createdBY+title+startDate+endDate+status+description
+    if("where and" in query_string):
+      query_string = query_string.replace("where and", "where")
+    print(query_string)
+    return query_string
+
