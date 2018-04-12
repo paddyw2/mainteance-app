@@ -5,12 +5,9 @@
 
 <h1>Inspection</h1>
 
-<p>Inspection info:</p>
-<p>
-{% for row_value in row_data[0] %}
-
-{{ row_value }},
-
-{% endfor %}
-</p>
+  {% include 'includes/event_values.html' %}
+  {% include 'includes/pos_view.html' %}
+  <p><strong>Est. Finish Date:</strong> {{ row_data[0][13] }}</p>
+  <p><strong>Next Inspection:</strong> {{ row_data[0][14] }}</p>
+  <p><strong>Work Done:</strong> {{ row_data[0][15] }}</p>
 {% endblock %}

@@ -5,12 +5,9 @@
 
 <h1>Rental</h1>
 
-<p>Rental info:</p>
-<p>
-{% for row_value in row_data[0] %}
+  {% include 'includes/event_values.html' %}
+  {% include 'includes/pos_view.html' %}
+  <p><strong>Problems:</strong> {{ row_data[0][13] }}</p>
+  <p><strong>Estimated Return:</strong> {{ row_data[0][14] }}</p>
 
-{{ row_value }},
-
-{% endfor %}
-</p>
 {% endblock %}

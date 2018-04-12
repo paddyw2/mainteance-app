@@ -5,12 +5,7 @@
 
 <h1>Write Off</h1>
 
-<p>Write Off info:</p>
-<p>
-{% for row_value in row_data[0] %}
-
-{{ row_value }},
-
-{% endfor %}
-</p>
+  {% include 'includes/event_values.html' %}
+  {% include 'includes/pos_view.html' %}
+  <p><strong>Reason:</strong> {{ row_data[0][13] }}</p>
 {% endblock %}
