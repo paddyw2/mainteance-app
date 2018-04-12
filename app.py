@@ -595,6 +595,25 @@ def customers():
   view = render_template("customers/index.html", data=user_info)
   return view
 
+@app.route("/customers/create")
+@require_login
+def customers_create():
+  view = render_template("customers/create.html")
+  return view
+
+@app.route("/customers/created", methods=['POST'])
+@require_login
+def customers_created():
+  handler = car_handler()
+  if (request.form['license_no'] != ""):
+    query_string = customer.create_customer(request.form)
+    handler.insert_values(query_string)
+    view = render_template("customers/created.html")
+  else:
+    view = render_template("customers/notCreated.html")
+  return view
+  
+
 @app.route("/customers/results", methods=['POST'])
 @require_login
 def customers_search():
