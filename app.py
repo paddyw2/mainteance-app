@@ -13,6 +13,7 @@ from repair.repair import repair
 from inspection.inspection import inspection
 from writeoff.writeoff import writeoff
 from user.user import user
+from customers.customer import customer
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -592,6 +593,15 @@ def event_results():
 def customers():
   user_info = "[username]"
   view = render_template("customers/index.html", data=user_info)
+  return view
+
+@app.route("/customers/results", methods=['POST'])
+@require_login
+def customers_search():
+  handler = car_handler()
+  query_string = customer.search_customer(request.form)
+  rows = handler.select_query_values(query_string)
+  view = render_template("customers/results.html", row_data=rows)
   return view
 
 @app.route("/users")
