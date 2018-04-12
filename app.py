@@ -177,6 +177,16 @@ def car_update(car_id):
   view = redirect(url_for('car_view', car_id=request.form['vin'])) 
   return view
 
+# Delete car
+@app.route("/cars/<int:car_id>/delete", methods=['POST'])
+@require_login
+def car_delete(car_id):
+  handler = car_handler()
+  rows = handler.insert_values("delete from car where vin_no="+str(car_id))
+  view = redirect(url_for('cars')) 
+  return view
+
+
 
 
 # Create Event - Functionality for creation visible per each car
