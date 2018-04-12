@@ -591,7 +591,7 @@ def event_results():
 @app.route("/customers")
 @require_login
 def customers():
-  user_info = "[username]"
+  user_info = "[session]"
   view = render_template("customers/index.html", data=user_info)
   return view
 
