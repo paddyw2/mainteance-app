@@ -93,6 +93,16 @@ def homepage():
   view = render_template("index.html", data=user_info)
   return view
 
+@app.route("/cars/<int:car_id>/events/all")
+@require_login
+def cars_events(car_id):
+  handler = car_handler()
+  query_string = "select * from event where car_vin="+str(car_id) 
+  rows = handler.select_query_values(query_string)
+  view = render_template("events/results.html", row_data=rows)
+  return view
+
+
 @app.route("/cars")
 @require_login
 def cars():
