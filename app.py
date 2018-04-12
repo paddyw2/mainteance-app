@@ -106,19 +106,25 @@ def cars_new():
 @require_login
 def car_available():
   #user_info = "[username]"
-  view = render_template("cars/available.html", data=user_info)
+  handler = car_handler()
+  # query_string should select ONLY available cars
+  query_string = "select * from car" 
+  rows = handler.select_query_values(query_string)
+  view = render_template("cars/available.html", row_data=rows)
   return view
 
 # Submission form for renting a car
 @app.route("/cars/rental_form")
 @require_login
 def car_rental_form():
+  view = render_template("cars/rental_form.html")
   return view
 
 # Submission form for buying a car
 @app.route("/cars/buy_form")
 @require_login
 def car_buy_form():
+  view = render_template("cars/buy_form.html")
   return view
 
 ############################################################################
