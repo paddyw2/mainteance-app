@@ -607,7 +607,7 @@ def customers_search():
 @app.route("/users")
 @require_login
 def users():
-  user_info = "[username]"
+  user_info = session
   view = render_template("users/index.html", data=user_info)
   return view
 
@@ -620,3 +620,20 @@ def users_search():
   view = render_template("users/results.html", row_data=rows)
   return view
 
+@app.route("/users/create")
+@require_login
+def users_create():
+  view = render_template("users/create.html")
+  return view
+
+@app.route("/users/created", methods=['POST'])
+@require_login
+def users_created():
+  handler = car_handler()
+  if (request.form['employee_no'] != ""):
+    query_string = user.create_user(request.form)
+    handler.insert_values(query_string)
+    view = render_template("/users/created.html")
+  else:
+    view = render_template("/users/notCreated.html")
+  return view

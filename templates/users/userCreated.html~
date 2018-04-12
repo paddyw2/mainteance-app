@@ -19,10 +19,10 @@
   <input type="text" placeholder="Address" name="address">
   <br>
   <button type="submit">Execute Query</button>
-  
-</form>
-{% if data.get("is_admin") == 1 %}
+  {% if data.get("is_admin") == 1 %}
   <a href="/users/create"><button>Create New User</button></a>
   {% endif %}
+</form>
+
 {% endblock %}
 <a href="/"><button>Home</button></a>

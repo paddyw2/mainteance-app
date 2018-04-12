@@ -4,8 +4,8 @@
 
 
 
-<h1>User </h1>
-<form action="/users/results" method="post">
+<h1>User Creation </h1>
+<form action="/users/created" method="post">
   <input type="text" placeholder="Employee Number" name="employee_no">
   <br>
   <input type="text" placeholder="Phone Number" name="phone_no">
@@ -21,8 +21,5 @@
   <button type="submit">Execute Query</button>
   
 </form>
-{% if data.get("is_admin") == 1 %}
-  <a href="/users/create"><button>Create New User</button></a>
-  {% endif %}
 {% endblock %}
 <a href="/"><button>Home</button></a>

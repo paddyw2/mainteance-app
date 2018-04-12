@@ -4,7 +4,7 @@ class car:
     make = post_values['make']
     extra_values = ""
     if(make != ""):
-      make = "\""+make+"\"" ","
+      make = "\""+make+"\"" + ","
       extra_values += ", make"
     model = post_values['model']
     if(model != ""):
