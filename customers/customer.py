@@ -25,4 +25,39 @@ class customer:
             query_string = query_string.replace("where and", "where")
         print(query_string)
         return query_string
+
+    # Function for creating a customer
+    def create_customer(post_values):
+        license_no = post_values['license_no'] + ","
+        extra_values = ""
+        phone_no = post_values['phone_no']
+        if (phone_no != ""):
+            phone_no = "\""+phone_no+"\","
+            extra_values += ", phone_no"
+
+        fname = post_values['fname']
+        if (fname != ""):
+            fname = "\""+fname+"\","
+            extra_values += ", fname"
+
+        lname = post_values['lname']
+        if (lname != ""):
+            lname = "\""+lname+"\","
+            extra_values += ", lname"
+            
+        address = post_values['address']
+        if (address != ""):
+            address = "\""+address+"\","
+            extra_values += ", address"
+
+        email = post_values['email']
+        if (email != ""):
+            email = "\""+email+"\","
+            extra_values += ", email"
+
+        query_string = "insert into user (employee_no"+extra_values+") values("+employee_no+phone_no+fname+lname+is_admin+address+");" 
+
+        query_string = query_string.replace(",)",")")
+        print(query_string)
+        return query_string
     
