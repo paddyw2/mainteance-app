@@ -1,0 +1,16 @@
+use 471_project;
+
+#example event insert
+insert into event(car_vin, created_by, description, title, status, start_date, end_date) values (32145, 2345223, "This is a description", "This is a title", "This is a status",  '1992-02-25', '1993-02-25');
+
+insert into event(car_vin, created_by, description, title, status, start_date, end_date) values (459827, 2345223, "This is also description", "This is also title", "This is also status",  '1992-02-25', '1993-02-25');
+
+insert into pos(event_id,license_no) values (1, "555");
+
+insert into rental(pos_id, problems, est_return) values (1, "none", '2020-03-25');
+
+insert into customer(license_no, phone_no, fname, lname, address, email) values ("555", "5875550000", "Greg", "Edison", "homeplace", "grege@grege.io")
+
+insert into available(pos_id, 
+
+insert into user(employee_no, phone_no, fname, lname, is_admin) values (123123, "18002472001", "Jane", "Doe", 0);
