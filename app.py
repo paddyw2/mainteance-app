@@ -10,6 +10,7 @@ from sale.sale import sale
 from available.available import available
 from backroom.backroom import backroom
 from repair.repair import repair
+from inspection.inspection import inspection
 
 app = Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -269,6 +270,28 @@ def event_repair_create(car_id):
   backroom_id = handler.insert_values(backroom_query)
   repair_query = repair.create_repair(request.form, backroom_id)
   repair_id = handler.insert_values(repair_query)
+  info = car_id
+  view = redirect(url_for('event_new', car_id=info)) 
+  return view
+
+# Inspection
+@app.route("/cars/<int:car_id>/events/backroom/inspection/new")
+@require_login
+def event_inspection(car_id):
+  info = car_id
+  view = render_template("events/backroom/inspection/new.html", car_id=info)
+  return view
+
+@app.route("/cars/<int:car_id>/events/backroom/inspection/create", methods=['POST'])
+@require_login
+def event_inspection_create(car_id):
+  handler = car_handler()
+  event_query = event.create_event(request.form, car_id, session.get("employee_no"))
+  event_id = handler.insert_values(event_query)
+  backroom_query = backroom.create_backroom(event_id, request.form["assigned"])
+  backroom_id = handler.insert_values(backroom_query)
+  inspection_query = inspection.create_inspection(request.form, backroom_id)
+  inspectino_id = handler.insert_values(inspection_query)
   info = car_id
   view = redirect(url_for('event_new', car_id=info)) 
   return view

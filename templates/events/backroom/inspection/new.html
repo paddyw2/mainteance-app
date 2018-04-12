@@ -1,0 +1,19 @@
+{% extends "includes/layout.html" %}
+
+{% block content %}
+
+
+<h1>Create New Inspection Event</h1>
+<form action="/cars/{{ car_id }}/events/backroom/inspection/create" method="post">
+  {% include 'includes/event_form.html' %}
+  {% include 'includes/backroom_form.html' %}
+  <input type="text" placeholder="Est. Finish Date" name="est_finish_date">
+  <br>
+  <input type="text" placeholder="Next Inspection" name="next_inspection">
+  <br>
+  <input type="text" placeholder="Work Done" name="work_done">
+  <br>
+  <button type="submit">Create Inspection Event</button>
+</form>
+
+{% endblock %}
