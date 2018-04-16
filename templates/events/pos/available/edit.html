@@ -6,7 +6,7 @@
 <h1>Edit Available Event</h1>
 <form action="/events/pos/available/{{ event_id }}/update" method="post">
   {% include 'includes/event_form_edit.html' %}
-  {% include 'includes/pos_form_edit.html' %}
+  {% include 'includes/hidden.html' %}
   <input type="text" placeholder="Condition" name="car_condition" value="{{ row_data[0][15] }}">
   <br>
   <input type="text" placeholder="Sale Price" name="sale_price" value="{{ row_data[0][14] }}">

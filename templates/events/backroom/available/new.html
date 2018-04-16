@@ -6,7 +6,7 @@
 <h1>Create New Available Event</h1>
 <form action="/cars/{{ car_id }}/events/backroom/available/create" method="post">
   {% include 'includes/event_form.html' %}
-  {% include 'includes/pos_form.html' %}
+  {% include 'includes/hidden.html' %}
   <input type="text" placeholder="Condition" name="car_condition">
   <br>
   <input type="text" placeholder="Sale Price" name="sale_price">
