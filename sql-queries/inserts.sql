@@ -49,3 +49,6 @@ insert into car(vin_no, make, model, license_plate) values(459827, "chevrolet", 
 
 insert into car(vin_no, make, model, license_plate) values (32145, "toyota", "corolla", "P238NM");
 
+# non-admin users
+
+insert into user(employee_no, phone_no, fname, lname, is_admin) values (123123, "18002472001", "Jane", "Doe", 0);

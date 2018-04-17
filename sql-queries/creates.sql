@@ -91,7 +91,6 @@ create table if not exists backroom (
     references user(employee_no)
     on update cascade
     on delete set null
-
 );
 
 # POS sub tables
@@ -181,46 +180,5 @@ create table if not exists repair (
     on update cascade
     on delete cascade
 );
-
-# Create Employee related tables
-
-# create Agent table
-create table if not exists agent (
-    agent_id int(32) not null auto_increment,
-    employee_no int(100) not null,
-    total_sales int(100),
-    primary key(agent_id),
-    foreign key fk_employee(employee_no)
-    references user(employee_no)
-    on update cascade
-    on delete cascade
-);
-
-# create Ratings table
-create table if not exists rating (
-    rating_id int(32) not null auto_increment,
-    employee_no int(100) not null,
-    rating int(100),
-    primary key(rating_id),
-    foreign key fk_employee(employee_no)
-    references user(employee_no)
-    on update cascade
-    on delete cascade
-);
-
-# create Mechanic table
-create table if not exists rating (
-    mechanic_id int(32) not null auto_increment,
-    employee_no int(100) not null,
-    company varchar(250),
-    speciality_list varchar(250),
-    primary key(mechanic_id),
-    foreign key fk_employee(employee_no)
-    references user(employee_no)
-    on update cascade
-    on delete cascade
-);
-
-# not done: car colour, speciality, additional items
 
 show tables;

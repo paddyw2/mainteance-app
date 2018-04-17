@@ -1,7 +1,7 @@
 class repair:
   def create_repair(post_values, backroom_id):
     est_finish_date = post_values['est_finish_date']
-    description = post_values['description']
+    description = post_values['repair_description']
     parts_list = post_values['parts_list']
     extra_values = ""
     if(est_finish_date != ""):
@@ -22,7 +22,7 @@ class repair:
 
   def update_repair(post_values, backroom_id):
     est_finish_date = post_values['est_finish_date']
-    description = post_values['description']
+    description = post_values['repair_description']
     print("D: "+description)
     parts_list = post_values['parts_list']
     if(est_finish_date != "" or est_finish_date == "None"):
