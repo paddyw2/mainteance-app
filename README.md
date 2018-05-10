@@ -1,6 +1,6 @@
 # Car Maintenance App
 
-A car maintenance and rental tracking web application.
+A car maintenance and rental tracking web application for a database course.
 
 Install Flask for Python3 using pip3: http://flask.pocoo.org/
 
